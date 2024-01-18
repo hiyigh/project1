@@ -7,3 +7,6 @@
 - spirng web : spring mvc framework 사용
 - mariadb : 무료, mysql 과 작동법이 유사
 - thymleaf : html 기반 사용이 편리하다.
+
+# front
+- bootstrap
