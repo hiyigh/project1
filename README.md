@@ -1,6 +1,7 @@
 # 목표
 - 제대로 코드를 작성할 수 있는지 확인하기 위해서
-  
+# 기간
+- 1/17 ~ 
 # 환경설정
 - java 11 : 안정적
 - spirng web : spring mvc framework 사용
