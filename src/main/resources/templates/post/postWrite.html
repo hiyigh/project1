@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout.html :: head}">
+    <title>Write Post</title>
+</head>
+<body>
+    <section th:replace="~{layout/sidebar.html :: section}"></section>
+    <div class="container mt-5">
+        <h2>글 작성</h2>
+        <div>
+            <label for="title" class="form label">제목</label>
+            <input type="text" class="form-control" id="title">
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">내용</label>
+            <textarea class="form-control" id="content" rows="10"></textarea>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="writePost()">글 작성</button>
+    <script>
+        function getCurrentDateTime() {
+            var now = new Date();
+            var formattedDateTime = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() +
+                ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+            return formattedDateTime;
+        }
+
+       function writePost() {
+            var title = document.getElementById('title').value;
+            var content = document.getElementById('content').value;
+            var currentDateTime = getCurrentDateTime();
+            var postData = {
+                title: title,
+                content: content
+                createdTime: currentDateTime
+            };
+
+            fetch("/writePost", {method: "POST", headers: {"Content-Type": "application/json" },
+                body: JSON.stringify(postData)})
+            .then(response => response.json())
+            .then(data => { console.log("글 작성", data);})
+            .catch(error => { console.error("Error:", error);
+             });
+       }
+    </script>
+    <script th:src="js/sidebar.js"></script>
+    <script th:src="js/search.js"></script>
+</body>
+</html>

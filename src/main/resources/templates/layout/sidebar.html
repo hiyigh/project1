@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html th:fragment="sidebar(sidebar)" lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{layout/layout.html :: head}">
+    <title>sidebar</title>
+</head>
+
+<body>
+    <section th:fragment="sidebar">
+        <aside class="side-bar">
+            <section class="side-bar__icon-box">
+                <section class="side-bar__icon-1">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </section>
+            </section>
+            <ul>
+                <li>
+                   <a href="#" class="category-link" data-category-id="-1"></a>
+                    <div>
+                        <p>Total</p>
+                    </div>
+                </li>
+                <li th:each="category : ${categoryList}">
+                    <div>
+                        <a href="#" class="category-link" data-category-id="${category.getCategoryId()}">
+                            <span th:text="${category.getCategoryTitle()} + '(' + ${category.getCategoryCount()} + ')'"></span>
+                        </a>
+                        <button th:if="${category.IsSub()}" onclick="togglesubCategoryList(this)">+</button>
+                    </div>
+                    <ul th:if="${category.IsSub()}" th:each="subCategory : ${category.getsubCategoryList()}">
+                        <li>
+                            <a href="#" class="category-link" data-category-id="${subCategory.getCategoryId()}">
+                                <span th:text="${subCategory.getCategoryTitle()}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+    </section>
+</body>
+</html>

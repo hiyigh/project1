@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout.html::head}">
+    <title>Category Edit</title>
+    <style>
+        body {
+            display: flex;
+        }
+        #category-list {
+            flex: 1;
+            padding: 20px;
+        }
+        #category-info {
+            flex: 2;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<section th:replace="~{layout/sidebar.html::section}"></section>
+<div id="category-list">
+    <ul>
+        <li th:each="category : ${categoryList}">
+            <div class="mainCategory" data-category-id="${category.getCategoryId()}">
+                <a href="#" class="category-link" data-category-id="${category.getCategoryId()}">
+                    <span th:text="${category.getCategoryTitle()}"></span>
+                </a>
+                <button th:if="${category.isSub()}" onclick="toggleSubCategoryList(this)">+</button>
+                <button onclick="addSubCategory(this)">Add subCategory</button>
+            </div>
+            <ul class="subCategoryList" style="display: none;">
+                <li th:each="subCategory : ${category.getSubCategoryList()}">
+                    <a href="#" class="category-link" data-category-id="${subCategory.getCategoryId()}">
+                        <span th:text="${subCategory.getCategoryTitle()}"></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="category-info">
+    <div>
+        <input type="hidden" id="category-info-id">
+        <label for="title" class="form label">카테고리 명:</label>
+        <input type="text" class="form-control-" id="title">
+    </div>
+    <button type="button" onclick="addMainCategory()">Add Main Category</button>
+    <button type="button" onclick="deleteCategory()">Delete</button>
+    <button type="button" onclick="editCategory()">Edit</button>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('.category-link').click(function(event){
+            event.preventDefault();
+            var categoryId = $(this).data('category-id');
+
+            $.ajax({
+                type:'GET',
+                url: '/category/edit,
+                data:{categoryId:categoryId},
+                success: function (response) {
+                    $('#title').val(response.title);
+                    $('#category-info-id').val(response.categoryId);
+                },
+                error: function(error) {console.error('send error', error);}
+            });
+        });
+    });
+    function toggleSubCategoryList(button) {
+        var mainCategory = $(button).closest('.mainCategory');
+        var subCategoryList = mainCategory.find('.subCategoryList');
+        subCategoryList.slideToggle();
+    }
+    function addSubCategory() {
+        var mainCategoryId = $(this).closest('.mainCategory').data(category-id);
+            $.ajax({
+                type:'POST',
+                url:'/category/addSub',
+                data: {mainCategoryId : mainCategoryId},
+                success: function(response){
+                    updateCategoryList(response);
+                    console.log('Add sub success',response);
+                },
+                error: function(error){console.log('Add sub error',error);}
+            });
+        }
+    }
+    function addMainCategory() {
+        var categoryTitle = $('#title').val();
+        $.ajax({
+            type:'POST',
+            url : '/category/addMain',
+            contentType:'application/json',
+            data:'JSON.stringify({categoryTitle:categoryTitle})',
+            success: function(response){
+                updateCategoryList(response);
+                console.log('Add success', response);
+            },
+            error: function(error) {
+                console.log('Add error', error);
+            }
+        });
+    }
+    function updateCategoryList(updatedCategoryList) {
+        $.each(updatedCategoryList, function (index, category) {
+            var existingCategory = $('#category-list .mainCategory[data-category-id="' + category.categoryId + '"]');
+
+            if (existingCategory.length === 0) {
+                var mainCategory = $('<div class="mainCategory" data-category-id= "' + category.categoryId +'">');
+                var categoryLink = $('<a href="#" class="category-link" data-category-id="' + category.categoryId + '">');
+                categoryLink.text(category.categoryTitle);
+                mainCategory.append(categoryLink);
+
+                if (category.isSub) {
+                    var addButton = $('<button onclick="toggleSubCategoryList(this)"> + </button>');
+                    mainCategory.append(addButton);
+                }
+
+                var subCategoryList = $('<ul class="subCategoryList" style="display: none;">');
+                $.each(category.subCategoryList, function (subIndex, subCategory) {
+                    var subCategoryItem = $('<li>');
+                    var subCategoryLink = $('<a href="#" class="category-link" data-category-id="' + subCategory.categoryId + '">');
+                    subCategoryLink.text(subCategory.categoryTitle);
+                    subCategoryItem.append(subCategoryLink);
+                    subCategoryList.append(subCategoryItem);
+                });
+
+                mainCategory.append(subCategoryList);
+
+                $('#category-list ul').append($('<li>').append(mainCategory));
+            } else {
+                existingCategory.find('.category-link').text(category.categoryTitle);
+            }
+        });
+    }
+    function deleteCategory() {
+        var categoryId = $('#category-info-id').val();
+        $.ajax({
+            type:'GET',
+            url :'/category/delete',
+            data:{categoryId : categoryId},
+            success: function(response){
+                console.log('Delete success', response);
+            },
+            error: function(error){
+                console.log('Delete error',error);
+            }
+        });
+    }
+    function editCategory() {
+        var categoryId = $('#category-info-id').val();
+        var categoryTitle = $('#title').val();
+        var requestData = {
+            categoryId: categoryId,
+            categoryTitle: categoryTitle
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/category/edit',
+            data: JSON.stringify(requestData),
+            contentType:'application/json',
+            success: function (response) {
+                console.log('Edit success', response);
+            },
+            error: function (error) {
+                console.error('Edit error', error);
+            }
+        });
+    }
+</script>
+<script th:src="js/search.js"></script>
+</body>
+</html>

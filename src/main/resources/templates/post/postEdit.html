@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout.html::head}"><title>Post Edit</title></head>
+<body>
+    <section th:replace="~{layout/sidebar.html::section}"></section>
+        <div>
+            <form id="editPostForm">
+                <input type="hidden" id="postId" th:value="${post.getId()}" />
+
+                <label for="newTitle">Title:</label>
+                <input type="text" id="newTitle" th:value="${post.getTitle()}" /><br />
+
+                <label for="newContent">Content:</label>
+                <textarea id="newContent" th:text="${post.getContent()}"></textarea><br />
+
+                <button type="button" onclick="editPost()">수정</button>
+            </form>
+        </div>
+
+        <script>
+        function editPost() {
+            var postId = document.getElementById('postId').value;
+            var newTitle = document.getElementById('newTitle').value;
+            var newContent = document.getElementById('newContent').value;
+
+            var postData = {
+                id: postId,
+                title: newTitle,
+                content: newContent
+            };
+
+            fetch("/editPost",{method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(postData)})
+                .then(response=>response.json())
+                .then(data=>{console.log("서버 응답",data);})
+                .catch(error=>{console.log("수정 에러", error);});
+        }
+    </script>
+    <script th:src="js/sidebar.js"></script>
+    <script th:src="js/search.js"></script>
+</body>
+</html>

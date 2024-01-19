@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout.html :: head}">
+    <title>Post View</title>
+</head>
+<body>
+    <section th:replace="~{layout/sidebar.html::section}"></section>
+
+    <div class="main">
+        <div class="postBox">
+            <h1 th:text="${post.getPostTitle}">제목</h1>
+            <h5 th:text="|작성일 : ${#temporals.format(post.getCreatedTime(), 'yyyy-MM-dd')}|">작성일</h5>
+            <h2 th:text="|작성자 : ${post.getPostWriter().getName()}|">작성자</h2>
+        </div>
+
+        <div class="content">
+            <div th:utext="${post.getPostContent()}"></div>
+        </div>
+
+        <div class="button">
+            <button type="button" class="btn btn-warning" onclick="editPost()">글 수정</button>
+            <button type="button" class="btn btn-danger" onclick="deletePost()">글 삭제</button>
+        </div>
+    </div>
+
+    <script>
+    function editPost() {
+            window.location.href="/editPost";
+        }
+    function deletePost() {
+        var postElement = document.getElementById("post");
+        var post = JSON.parse(postElement.textContent);
+        var postId = post.postId;
+
+        fetch("/deletePost", {method:"POST", headers:{"Content-Type", "application/json"}, body:JSON.stringify({post:postId})})
+        .then(response=>response.json())
+        .then(data=>{console.log("success");})
+        .catch(error=>{console.log("fail send delete id",error);});
+    }
+    </script>
+    <script th:src="js/sidebar.js"></script>
+    <script th:src="js/search.js"></script>
+</body>
+</html>
