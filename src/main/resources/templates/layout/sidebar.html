@@ -27,9 +27,9 @@
                         <a href="#" class="category-link" data-category-id="${category.getCategoryId()}">
                             <span th:text="${category.getCategoryTitle()} + '(' + ${category.getCategoryCount()} + ')'"></span>
                         </a>
-                        <button th:if="${category.IsSub()}" onclick="togglesubCategoryList(this)">+</button>
+                        <button th:if="${category.isRoot()}" onclick="togglesubCategoryList(this)">+</button>
                     </div>
-                    <ul th:if="${category.IsSub()}" th:each="subCategory : ${category.getsubCategoryList()}">
+                    <ul th:if="${category.isRoot()}" th:each=" subCategory : ${category.getsubCategoryList()}">
                         <li>
                             <a href="#" class="category-link" data-category-id="${subCategory.getCategoryId()}">
                                 <span th:text="${subCategory.getCategoryTitle()}"></span>

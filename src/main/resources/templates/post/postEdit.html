@@ -4,7 +4,14 @@
 <body>
     <section th:replace="~{layout/sidebar.html::section}"></section>
         <div>
+            <ul>
+                <li th:each="category : ${categoryList}">
+                    <a href="#" th:text="category.getCategoryTitle()" onclick="setCategoryId(category.getCategoryId())"></a>
+                </li>
+            </ul>
+
             <form id="editPostForm">
+                <input type="hidden" id="newCategoryId" value="">
                 <input type="hidden" id="postId" th:value="${post.getId()}" />
 
                 <label for="newTitle">Title:</label>
@@ -18,15 +25,20 @@
         </div>
 
         <script>
+        function setCategoryId(categoryId){
+            $('#newCategoryId').val(categoryId);
+        }
         function editPost() {
             var postId = document.getElementById('postId').value;
             var newTitle = document.getElementById('newTitle').value;
             var newContent = document.getElementById('newContent').value;
+            var newCategoryId = document.getElementById('newCategoryId').value;
 
             var postData = {
                 id: postId,
                 title: newTitle,
-                content: newContent
+                content: newContent,
+                categoryId: newCategoryId
             };
 
             fetch("/editPost",{method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(postData)})

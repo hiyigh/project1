@@ -25,7 +25,7 @@
                 <a href="#" class="category-link" data-category-id="${category.getCategoryId()}">
                     <span th:text="${category.getCategoryTitle()}"></span>
                 </a>
-                <button th:if="${category.isSub()}" onclick="toggleSubCategoryList(this)">+</button>
+                <button th:if="${category.isRoot()}" onclick="toggleSubCategoryList(this)">+</button>
                 <button onclick="addSubCategory(this)">Add subCategory</button>
             </div>
             <ul class="subCategoryList" style="display: none;">
@@ -112,7 +112,7 @@
                 categoryLink.text(category.categoryTitle);
                 mainCategory.append(categoryLink);
 
-                if (category.isSub) {
+                if (!category.isRoot) {
                     var addButton = $('<button onclick="toggleSubCategoryList(this)"> + </button>');
                     mainCategory.append(addButton);
                 }

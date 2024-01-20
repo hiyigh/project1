@@ -12,7 +12,7 @@ public interface PostRepoMethod {
 
     void update(Post updatePost);
 
-    Post getPostById(int postId);
+    Post getPostById(Long postId);
 
     List<Post> getPostByKeywordOrNull(String keyword);
 

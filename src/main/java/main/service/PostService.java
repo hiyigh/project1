@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import main.dto.PostDto;
 import main.model.Post;
+import main.model.Time;
 import main.repository.method.PostRepoMethod;
 import main.service.method.PostMethod;
 import java.util.List;
@@ -31,11 +32,18 @@ public class PostService implements PostMethod {
         postRepoMethod.delete(postId);
     }
     @Override
-    public void update(Post updatePost) {
+    public void update(PostDto updatePostDto) {
+        Post updatePost = postRepoMethod.getPostById(updatePostDto.getPostId());
+
+        updatePost.setPostTitle(updatePostDto.getPostTitle());
+        updatePost.setPostContent(updatePostDto.getPostContent());
+        updatePost.setCategoryId(updatePost.getCategoryId());
+
         postRepoMethod.update(updatePost);
     }
+
     @Override
-    public Post getPostById(int postId) {
+    public Post getPostById(Long postId) {
         return postRepoMethod.getPostById(postId);
     }
     @Override

@@ -7,6 +7,20 @@
     <section th:replace="~{layout/sidebar.html :: section}"></section>
     <div class="container mt-5">
         <h2>글 작성</h2>
+        <div class="category-list">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                카테고리 목록
+            </a>
+
+            <ul>
+                <li th:each="category : ${categoryList}">
+                    <a href="#" th:text="category.getCategoryTitle()" onclick="setCategoryId(category.getCategoryId())"></a>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <input type="hidden" id="categoryId" name="categoryId" value="">
+        </div>
         <div>
             <label for="title" class="form label">제목</label>
             <input type="text" class="form-control" id="title">
@@ -26,13 +40,19 @@
             return formattedDateTime;
         }
 
-       function writePost() {
+        function setCategoryId(categoryId) {
+            $('#categoryId').val(categoryId);
+        }
+
+        function writePost() {
             var title = document.getElementById('title').value;
             var content = document.getElementById('content').value;
+            var categoryId = document.getElementById('categoryId').value;
             var currentDateTime = getCurrentDateTime();
             var postData = {
                 title: title,
-                content: content
+                content: content,
+                categoryId: categoryId,
                 createdTime: currentDateTime
             };
 

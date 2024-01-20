@@ -10,9 +10,9 @@ public interface PostMethod {
 
     void delete(int postId);
 
-    void update(Post updatePost);
+    void update(PostDto updatePostDto);
 
-    Post getPostById(int postId);
+    Post getPostById(Long postId);
 
     List<Post> getPostByKeywordOrNull(String keyword);
 

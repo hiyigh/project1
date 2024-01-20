@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Share {
-    private LocalDateTime createdTime;
-    private LocalDateTime updatedTime;
+public class Time {
+    protected LocalDateTime createdTime = LocalDateTime.now();
+    protected LocalDateTime updatedTime;
 }

@@ -1,6 +1,7 @@
 package main.dto;
 
 import lombok.Getter;
+import main.model.Comment;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +11,6 @@ public class PostDto {
     private String postTitle;
     private String postContent;
     private int categoryId;
-    private List<Integer> commentList;
+    private List<Comment> commentList;
     private LocalDateTime createdTime;
 }

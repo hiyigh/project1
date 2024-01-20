@@ -17,7 +17,7 @@ public class DatabaseConfig {
         dataSource.setPassword("your_password");
         dataSource.setDriverClassName("org.mariadb.jdbc.Driver");
         dataSource.setConnectionTimeout(20000);
-        dataSource.setMaximumPoolSize(5);
+        dataSource.setMaximumPoolSize(1);
         return dataSource;
     }
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
