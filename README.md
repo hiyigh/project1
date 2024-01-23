@@ -1,5 +1,5 @@
 # 목표
-- 제대로 코드를 작성할 수 있는지 확인하기 위해서
+- 제대로 코드를 작성할 수 있는지 확인하기 위해서 (dependency,ajax, mvc model,oauth2,aws,db)
 # 기간
 - 1/17 ~ 
 # 환경설정
@@ -16,7 +16,16 @@
 - mariadb : 무료, mysql 과 작동법이 유사
     
 # front
-- bootstrap : css 
-- Ajax (jquery) : 호환성, 간편
+- bootstrap : 기존의 css 형식 사용 
+- Ajax (jquery) : 부분 데이터 업데이트
 - html, javascript
+- thymeleaf
+# back
+- java
+- spring boot
+
+# 과정
+- 기본적으로 html, thymeleaf 로 로딩
+- 데이터 업데이트시 일부만 변경
+  - comment, category 재귀로 서버에서 랜더링 후 데이터를 전달하는 방식 or 브라우저 랜더링하는 방식
 - 
