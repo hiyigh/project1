@@ -8,9 +8,9 @@ import java.util.List;
 @Getter
 public class PostDto {
     private Long postId;
+    private Long userId;
     private String postTitle;
     private String postContent;
-    private int categoryId;
-    private List<Comment> commentList;
+    private Long categoryId;
     private LocalDateTime createdTime;
 }

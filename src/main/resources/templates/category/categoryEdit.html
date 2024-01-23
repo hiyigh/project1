@@ -60,7 +60,7 @@
                 url: '/category/edit,
                 data:{categoryId:categoryId},
                 success: function (response) {
-                    $('#title').val(response.title);
+                    $('#title').val(response.categoryTitle);
                     $('#category-info-id').val(response.categoryId);
                 },
                 error: function(error) {console.error('send error', error);}

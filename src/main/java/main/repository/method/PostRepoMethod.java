@@ -8,7 +8,7 @@ public interface PostRepoMethod {
 
     void add(Post post);
 
-    void delete(int postId);
+    void delete(Long postId);
 
     void update(Post updatePost);
 
@@ -16,7 +16,7 @@ public interface PostRepoMethod {
 
     List<Post> getPostByKeywordOrNull(String keyword);
 
-    List<Post> getPostByCategory(int categoryId);
+    List<Post> getPostByCategory(Long categoryId);
 
     List<Post> getAllPosts();
     Long getLastPostIdOrNull();

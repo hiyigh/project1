@@ -24,8 +24,8 @@ public class CommentService implements CommentMethod {
     }
 
     @Override
-    public void update(CommentDto commentDto) {
-        commentRepoMethod.update(commentDto);
+    public void update(Comment comment) {
+        commentRepoMethod.update(comment);
     }
 
     @Override
@@ -41,5 +41,17 @@ public class CommentService implements CommentMethod {
     @Override
     public List<Comment> getAllComments() {
         return commentRepoMethod.getAllComments();
+    }
+    @Override
+    public Long getLastCommentNum() {
+        return commentRepoMethod.getLastCommentNum();
+    }
+    @Override
+    public List<Comment> getCommentByParentId(Long parentId) {
+        return commentRepoMethod.getCommentByParentId(parentId);
+    }
+    @Override
+    public void deleteByParentId(Long parentId) {
+        commentRepoMethod.deleteByParentId(parentId);
     }
 }

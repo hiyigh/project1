@@ -10,11 +10,17 @@ public interface CommentRepoMethod {
 
     void delete(Long commentId);
 
-    void update(CommentDto commentDto);
+    void update(Comment comment);
 
     Comment getCommentById(Long commentId);
 
     List<Comment> getCommentByPostId(Long postId);
 
     List<Comment> getAllComments();
+
+    Long getLastCommentNum();
+
+    List<Comment> getCommentByParentId(Long parentId);
+
+    void deleteByParentId(Long parentId);
 }

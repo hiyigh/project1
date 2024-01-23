@@ -8,35 +8,263 @@
 
     <div class="main">
         <div class="postBox">
-            <h1 th:text="${post.getPostTitle}">제목</h1>
-            <h5 th:text="|작성일 : ${#temporals.format(post.getCreatedTime(), 'yyyy-MM-dd')}|">작성일</h5>
-            <h2 th:text="|작성자 : ${post.getPostWriter().getName()}|">작성자</h2>
+            <div clasa="login-info">
+                <input type="hidden" id="loginId" data-login-id="${user.userId}">
+                <input type="hidden" id="loginRole" data-login-role="${user.role}">
+                <input type="hidden" id="loginName" data-login-name="${user.userName}">
+            </div>
+            <div class="post-info">
+                <input type="hidden" id="postId" data-postId="${post.postId}">
+                <input type="hidden" id="postUserId" data-userId="${post.postUserId}">
+            </div>
+            <div class="post-title mb-2">
+                <span><h1 th:text="${post.getPostTitle()}">제목</h1></span>
+            </div>
+            <div class="post-date">
+                <span><h5 th:text="|작성일 : ${#temporals.format(post.getCreatedTime(), 'yyyy-MM-dd')}|">작성일</h5></span>
+            </div>
+            <div class="post-writer">
+                <span><h2 th:text="|작성자 : ${post.postWriter}|">작성자</h2></span>
+            </div>
         </div>
 
-        <div class="content">
+        <div class="post-content">
             <div th:utext="${post.getPostContent()}"></div>
         </div>
 
-        <div class="button">
+        <div class="post-button">
             <button type="button" class="btn btn-warning" onclick="editPost()">글 수정</button>
             <button type="button" class="btn btn-danger" onclick="deletePost()">글 삭제</button>
         </div>
     </div>
 
-    <script>
-    function editPost() {
-            window.location.href="/editPost";
-        }
-    function deletePost() {
-        var postElement = document.getElementById("post");
-        var post = JSON.parse(postElement.textContent);
-        var postId = post.postId;
+    <div class="mb-2" >
+        <ul class="comment-list">
+            <li th:each-="comment : ${commentList}">
+                <input type="hidden" class="commentId" data-userId="${comment.userId}">
+                <input type="hidden" class="commentWriter" data-commentWriter="${comment.commentWriter}">
+                <b id="'commentWriter_' + ${comment.commentId}" th:text="${comment.commentWriter}"></b>
+                <span th:text="${comment.commentContent}"></span>
+                <span style='float:right;' align='right' id="'commentDate_' + ${comment.commentId}" th:text="${displayTime(comment.createdTime)}"></span>
 
-        fetch("/deletePost", {method:"POST", headers:{"Content-Type", "application/json"}, body:JSON.stringify({post:postId})})
-        .then(response=>response.json())
-        .then(data=>{console.log("success");})
-        .catch(error=>{console.log("fail send delete id",error);});
+                <div class='comment_content mb-1' >
+                    <h5 id="'commentText_' + ${comment.commentId}" style='display: inline' th:text="comment.commentContent"></h5>
+                </div>
+
+                <span style='cursor: pointer; color: blue' class='reCommentBtn' id="'reCommentBtn_' + ${comment.commentId}" data-parent-id="${comment.commentId}"> 답글 달기 </span>
+                <span style='display:none; cursor: pointer; color: blue' class='reCommentCloseBtn' id="'reCommentCloseBtn_' + ${comment.commentId}">답글 닫기 </span>
+
+                <span th:if="${comment.userId == loginId}" style='cursor: pointer; color: blue' class='commentMod'> 수정 </span>
+                <span th:if="${loginRole == 'ROLE_ADMIN' or comment.userId == loginId}" style='cursor: pointer; color: blue' class='commentDel'>삭제</span>
+
+                <hr>
+                <div class='mx-4 reCommentDiv' id="'reCommentDiv_' + ${comment.commentId}"></div>
+            </li>
+        </ul>
+    </div>
+    <div class="commentBtn">
+        <form>
+            <div class="mb-3">
+                <label for="commentInput" class="form-label">댓글 작성</label>
+                <input type="text" id="commentInput" class="form-control" placeholder="댓글 입력">
+            </div>
+            <button th:if="${user}" type="button" class="btn btn-primary" id="commentWriteBtn" data-userId="${user.userId}">댓글 작성</button>
+        </form>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        updateCommentList();
+
+        $('#commentWriteBtn').click(function() {
+            event.preventDefault();
+
+            var commentForm = {
+                var postId = $('#postId').data('postId');
+
+                var commentContent = $('#commentInput').val();
+                var commentUserId = $('#commentBtn').data('userId');
+            };
+            $.ajax({
+                type:'POST',
+                url:'/comment/addComment',
+                data: commentForm,
+                success: function(response) {
+                    updateCommentList();
+                    console.log('add comment', response);
+                },
+                error: function() {
+                    console.log('add comment error', error);
+                }
+            });
+        });
+    });
+    $(document).on("click",".reCommentBtn",function(){
+        const parentId = $(this).data('parent-id');
+        const _this = $(this);
+        $.ajax({
+            type:'GET',
+            url: '/comment/addReComment',
+            data:{parentId : parentId},
+            success: function(response){
+                let html = "";
+                if (response.list.length > 0) {
+                    for (let i = 0; i < response.list.length; ++i){
+                        html += "<div class='mb-2'>";
+                        html += "<input type='hidden' id='commentId_" + response.list[i].commentId +"' value='" + response.list[i].commentId + "'>"
+                        html += "<b id='commentWriter_" + response.list[i].commentId + "' >" + response.list[i].writer + "</b>";
+                        html += "<span style='float:right;' align='right' id='commentDate'> " + displayTime(response.list[i].createdTime) + " </span>";
+                        html += "<h5 id='commentText_"+ response.list[i].id +"'>" + response.list[i].commentContent + "</h5>";
+                        if (response.list[i].writer === $("#loginId").data(login-id)) {
+                            html += "<span style='cursor: pointer; color: blue' class='commentMod'>수정 </span>";
+                            html += "<span style='cursor: pointer; color: blue' class='commentDel'>삭제</span>";
+                        } else if($("#loginRole").data(login-role) === "ROLE_ADMIN"){
+                            html += "<span style='cursor: pointer; color: blue' class='commentDel'>삭제</span>";
+                        }
+                        html += "<hr>";
+                        html += "</div>";
+                    }
+                } else {
+                    html += "<div class='mb-2'>";
+                    html += "<h6><strong>등록된 댓글이 없습니다.</strong></h6>";
+                    html += "</div>";
+                }
+                html += "<input style='width: 90%' id='reComment_"+cid+"' class='reComment' name='reComment' placeholder='댓글을 입력해 주세요'>";
+                html += "<button type='button' class='btn btn-primary mx-2 reCommentSubmit'>등록</button>";
+
+                _this.siblings(".reCommentDiv").html(html);
+            },
+            error:function(error) {
+                alert("code error: " + error);
+            }
+        });
+    });
+    function updateCommentList() {
+        var loginId = $('#loginId').data('login-id');
+        var loginRole = $('#loginRole').date('login-role');
+        var loginName = $('#loginName').data('login-name');
+
+        var postId = $('#postId').data(postId);
+        $.ajax({
+            type:'POST',
+            url: '/comment/updateList'
+            data: {
+                postId : postId,
+            },
+            success: function(response) {
+                let html = "";
+                var updateCommentList = response;
+                if (updateCommentList.length > 0) {
+                    for (let i = 0; i < updateCommentList.length; ++i) {
+                        html += "<div class='mb-2'>";
+                        html += "<input type='hidden' id='commentId' data-commentId='" + response.list[i].commentId + "'>";
+                        html += "<b id='commentWriter'>" + response.list[i].writer + "</b>";
+                        html += "<span style='float:right;' align='right' id='createdTime'>" + displayTime(response.list[i].createdTime) + "</span>";
+                        html += "<div class='mb-1 comment-box'>";
+                        html += "<h5 id='commentText_ "+response.list[i].commentId +"' style='display;inline'>" + response.list[i].commentContent + "</h5>";
+
+                        if (response.list[i].commentWriter === loginName && response.list[i].userId === loginId) {
+                            html += "<span style='cursor: pointer; color: blue' class='commentMod'>수정</span>";
+                            html += "<span style='cursor: pointer; color: blue' class='commentDel'>삭제</span>";
+                        } else if (loginRole === 'ROLE_ADMIN') {
+                            html += "<span style='cursor: pointer; color: blue' class='commentDelete'>삭제</span>";
+                        }
+                        html += "<span style='cursor: pointer; color:blue' class='reCommentBtn' id='reCommentBtn-" + response.list[i].commentId + "'>답글 달기</span>";
+                        html += "</div>";
+                        html += "</div>";
+                    }
+                } else {
+                    html += "<div class='mb-2'>";
+                    html += "<h5><strong>등록된 댓글이 없습니다.</strong></h5>";
+                    html += "</div>";
+                }
+                $("#comment-list").html(html);
+            },
+        });
     }
+
+    $(document).on("click","commentMod", function(){
+        var commentId = $(this).siblings.('commentId').data('commentId');
+        var commentContent = $(this).siblings.('.comment-box').find('#commentContent').text();
+
+        var editForm = "<div class='edit-form'>";
+        editForm = "<textarea id='editCommentContent'>" + commentContent + "</textarea>";
+        editFrom = "<button class='btn btn-primary' id='editCommentBtn' data-commentId='"+commentId+"'>수정 완료</button>";
+        editForm = "</div>";
+
+        $(this).siblings("h5").replaceWith(editForm);
+    });
+    $(document).on("click", "#editCommentBtn", function(){
+        var editComment = $('#editCommentContent').val();
+        var commentId = $(this).data('commentId');
+        $.ajax({
+            type:'PUT',
+            url: '/comment/edit',
+            data: {
+                commentId : commentId,
+                editComment : editComment
+            },
+            success: function(response) {
+                alert("수정 완료");
+            },
+            error: function(error) {
+                alert("수정 실패");
+            }
+        });
+        var originalCommentContent = "<h5 id='commentText_" + commentId + "'>" + editedCommentContent + "</h5>";
+        $(this).closest('.edit-form').replaceWith(originalCommentContent);
+    });
+    $(document).on("click","commentDel", function(){
+        var commentId = $(this).siblings.('commentId').data('commentId');
+        $.ajax({
+            type:'PUT',
+            url:'/comment/delete',
+            data:{commentId:commentId},
+            success:function(){
+                alert("삭제 성공");
+            },
+            error:function(){
+                alert("삭제 실패");
+            }
+        });
+    });
+
+    function editPost() {
+        if(loginId === $('#postUserId').data('userId')) {
+            $.ajax({
+                type:'GET',
+                url: '/post/edit',
+                data: {postId : $('#postId').data('postId')},
+                success: function(response) {
+                    console.log('edit success', response);
+                },
+                error : function(error) {
+                    console.log('edit error', error);
+                }
+            });
+        } else {
+            var popupMessage = "로그인이 필요합니다."
+            alert(popupMessage);
+        }
+    }
+    function deletePost() {
+        if (loginId === $('#postUserId').data('userId') || loginRole === "ROLE_ADMIN") {
+            var postId = $('#postId').data('postId');
+            $.ajax({
+                type:'GET',
+                url:'/post/delete',
+                data:{postId : postId},
+                success: function(response) {
+                    alert("삭제 성공");
+                    location.reload();
+                },
+                error: function(error) {
+                    alert("삭제 실페");
+                }
+            });
+        }
+    }
+
     </script>
     <script th:src="js/sidebar.js"></script>
     <script th:src="js/search.js"></script>

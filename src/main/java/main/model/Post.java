@@ -13,16 +13,14 @@ public class Post extends Time {
     private Long postId;
     private String postTitle;
     private String postContent;
-    private int userId;
-    private int categoryId;
-    private List<Integer> commentList;
-    @Builder
-    public void builder(Long postId, String postTitle, String postContent, int categoryId, int userId) {
+    private Long userId;
+    private Long categoryId;
+
+    public void builder(Long postId, String postTitle, String postContent, Long categoryId, Long userId) {
         this.postId = postId;
         this.postTitle = postTitle;
         this.postContent = postContent;
         this.categoryId = categoryId;
-        this.commentList = null;
         this.userId = userId;
     }
     public void setPostTitle(String postTitle) {
@@ -31,7 +29,7 @@ public class Post extends Time {
     public void setPostContent(String postContent) {
         this.postContent = postContent;
     }
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 }

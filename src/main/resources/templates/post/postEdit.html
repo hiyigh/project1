@@ -5,7 +5,7 @@
     <section th:replace="~{layout/sidebar.html::section}"></section>
         <div>
             <ul>
-                <li th:each="category : ${categoryList}">
+                 <li th:each="category : ${categoryList}">
                     <a href="#" th:text="category.getCategoryTitle()" onclick="setCategoryId(category.getCategoryId())"></a>
                 </li>
             </ul>
@@ -25,7 +25,7 @@
         </div>
 
         <script>
-        function setCategoryId(categoryId){
+        function setCategoryId(categoryId) {
             $('#newCategoryId').val(categoryId);
         }
         function editPost() {
@@ -41,7 +41,7 @@
                 categoryId: newCategoryId
             };
 
-            fetch("/editPost",{method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(postData)})
+            fetch("/post/edit",{method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(postData)})
                 .then(response=>response.json())
                 .then(data=>{console.log("서버 응답",data);})
                 .catch(error=>{console.log("수정 에러", error);});

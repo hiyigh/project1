@@ -4,31 +4,29 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import main.dto.PostDto;
 import main.model.Post;
-import main.model.Time;
 import main.repository.method.PostRepoMethod;
 import main.service.method.PostMethod;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
+@Service
 public class PostService implements PostMethod {
     private final PostRepoMethod postRepoMethod;
     @Override
-    public void add(PostDto postDto, int userId) {
+    public void add(PostDto postDto) {
         Long lastPostId = postRepoMethod.getLastPostIdOrNull();
         if (lastPostId == null) lastPostId = 1L;
 
         Post post = new Post();
-        post.builder().postId(lastPostId)
-                .postTitle(postDto.getPostTitle())
-                .postContent(postDto.getPostContent())
-                .categoryId(postDto.getCategoryId())
-                .userId(userId) // spring security 를 활용해서 login 된 user 데이터를 가져온다.
-                .build();
+        post.builder(lastPostId, postDto.getPostTitle(),postDto.getPostContent()
+                ,postDto.getCategoryId(),postDto.getUserId());
         postRepoMethod.add(post);
     }
     @Override
-    public void delete(int postId) {
+    public void delete(Long postId) {
         postRepoMethod.delete(postId);
     }
     @Override
@@ -51,7 +49,7 @@ public class PostService implements PostMethod {
         return postRepoMethod.getPostByKeywordOrNull(keyword);
     }
     @Override
-    public List<Post> getPostByCategory(int categoryId) {
+    public List<Post> getPostByCategory(Long categoryId) {
         return postRepoMethod.getPostByCategory(categoryId);
     }
     @Override
@@ -59,4 +57,8 @@ public class PostService implements PostMethod {
         return postRepoMethod.getAllPosts();
     }
 
+    @Override
+    public Long getLastPostIdOrNull() {
+        return postRepoMethod.getLastPostIdOrNull();
+    }
 }

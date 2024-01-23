@@ -2,6 +2,7 @@ package main.service;
 
 import lombok.RequiredArgsConstructor;
 import main.model.User;
+import main.repository.UserRepository;
 import main.repository.method.UserRepoMethod;
 import main.service.method.UserMethod;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserMethod {
-    private final UserRepoMethod userRepoMethod;
+    private final UserRepository userRepoMethod;
     @Override
     public User getUserById(Long userId) {
         return userRepoMethod.getUserById(userId);

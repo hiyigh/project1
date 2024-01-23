@@ -20,6 +20,7 @@
                    <a href="#" class="category-link" data-category-id="-1"></a>
                     <div>
                         <p>Total</p>
+                        <span id="category-edit" style="cursor: pointer; color: blue;">Edit Category</span>
                     </div>
                 </li>
                 <li th:each="category : ${categoryList}">
@@ -27,9 +28,9 @@
                         <a href="#" class="category-link" data-category-id="${category.getCategoryId()}">
                             <span th:text="${category.getCategoryTitle()} + '(' + ${category.getCategoryCount()} + ')'"></span>
                         </a>
-                        <button th:if="${category.isRoot()}" onclick="togglesubCategoryList(this)">+</button>
+                        <button th:if="${category.isRoot()}" onclick="toggleSubCategoryList(this)">+</button>
                     </div>
-                    <ul th:if="${category.isRoot()}" th:each=" subCategory : ${category.getsubCategoryList()}">
+                    <ul th:if="${category.isRoot()}" th:each=" subCategory : ${category.getSubCategoryList()}">
                         <li>
                             <a href="#" class="category-link" data-category-id="${subCategory.getCategoryId()}">
                                 <span th:text="${subCategory.getCategoryTitle()}"></span>
@@ -40,5 +41,13 @@
             </ul>
         </aside>
     </section>
+<script>
+    $(document).ready(function(){
+        $('#category-edit').click(function(){
+            var url = '/category/edit';
+            window.location.href=url;
+        });
+    });
+</script>
 </body>
 </html>

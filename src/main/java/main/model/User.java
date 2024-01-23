@@ -15,15 +15,17 @@ public class User extends Time {
     private String userEmail;
     private String userPassword;
     private boolean userSex;
+    private Role role;
     @Builder
     public void builder(Long userId, String userName, String userEmail, String userPassword,
-                        boolean userSex, LocalDateTime createdTime) {
+                        boolean userSex, LocalDateTime createdTime, Role role) {
         this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userSex = userSex;
         super.createdTime = createdTime;
+        this.role = role;
     }
     @Override
     public boolean equals(Object o) {

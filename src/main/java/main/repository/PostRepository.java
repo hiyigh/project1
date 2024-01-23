@@ -19,7 +19,7 @@ public class PostRepository implements PostRepoMethod {
                 post.getPostContent(), post.getCategoryId(), post.getCreatedTime());
     }
     @Override
-    public void delete(int postId) {
+    public void delete(Long postId) {
         String sql = "delete from Posts where postId = ?";
         jdbcTemplate.update(sql, postId);
     }
@@ -45,7 +45,7 @@ public class PostRepository implements PostRepoMethod {
     }
 
     @Override
-    public List<Post> getPostByCategory(int categoryId) {
+    public List<Post> getPostByCategory(Long categoryId) {
         return jdbcTemplate.query("select * from Posts where categoryId = ?", new Object[]{categoryId},
                 new BeanPropertyRowMapper<>(Post.class));
     }

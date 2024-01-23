@@ -6,9 +6,9 @@ import main.model.Post;
 import java.util.List;
 
 public interface PostMethod {
-    void add(PostDto postDto, int userId);
+    void add(PostDto postDto);
 
-    void delete(int postId);
+    void delete(Long postId);
 
     void update(PostDto updatePostDto);
 
@@ -16,7 +16,9 @@ public interface PostMethod {
 
     List<Post> getPostByKeywordOrNull(String keyword);
 
-    List<Post> getPostByCategory(int categoryId);
+    List<Post> getPostByCategory(Long categoryId);
 
     List<Post> getAllPosts();
+
+    Long getLastPostIdOrNull();
 }
