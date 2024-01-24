@@ -15,6 +15,11 @@ public class LayoutService {
     private final CategoryMethod categoryMethod;
     public void addLayout(Model model) {
         List<Category> categoryList = categoryMethod.getAllCategoryList();
+        for (int i = 0; i<categoryList.size(); ++i) {
+            System.out.println("categoryList: " + categoryList.get(i).getCategoryTitle() + categoryList.size()
+                    + categoryList.get(i).getCategoryId()+ categoryList.get(i).getMainCategoryId());
+        }
+
         model.addAttribute("categoryList",categoryList);
     }
 }

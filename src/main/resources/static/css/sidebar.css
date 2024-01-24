@@ -31,6 +31,7 @@ body {
   width: var(--side-bar-width);
   min-height: var(--side-bar-height);
   margin-top: calc((100vh - var(--side-bar-height)) / 2);
+  z-index:1000;
 }
 
 /* 아이콘 시작 */
@@ -150,4 +151,3 @@ body {
 .side-bar:hover {
   transform: translate(-20px, 0);   /* 둥근 모서리의 너비만큼 숨겨주기 */
 }
-출처: https://me-in-journey.com/entry/HTMLCSS-사이드바-메뉴-만들기-나타나는-2차-메뉴-만들기-feat-transform-translate [내 코딩 여정:티스토리]

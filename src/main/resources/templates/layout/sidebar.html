@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html th:fragment="sidebar(sidebar)" lang="ko" xmlns:th="http://www.thymeleaf.org">
-
-<head th:insert="~{layout/layout.html :: head}">
-    <title>sidebar</title>
-</head>
+<html th:fragment="sidebar" lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <body>
     <section th:fragment="sidebar">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
         <aside class="side-bar">
             <section class="side-bar__icon-box">
                 <section class="side-bar__icon-1">
@@ -17,37 +15,34 @@
             </section>
             <ul>
                 <li>
-                   <a href="#" class="category-link" data-category-id="-1"></a>
-                    <div>
-                        <p>Total</p>
-                        <span id="category-edit" style="cursor: pointer; color: blue;">Edit Category</span>
-                    </div>
+                    <a href="#">menu1</a>
+                    <ul>
+                        <li><a href="#">text1</a></li>
+                        <li><a href="#">text2</a></li>
+                        <li><a href="#">text3</a></li>
+                        <li><a href="#">text4</a></li>
+                    </ul>
                 </li>
-                <li th:each="category : ${categoryList}">
-                    <div>
-                        <a href="#" class="category-link" data-category-id="${category.getCategoryId()}">
-                            <span th:text="${category.getCategoryTitle()} + '(' + ${category.getCategoryCount()} + ')'"></span>
-                        </a>
-                        <button th:if="${category.isRoot()}" onclick="toggleSubCategoryList(this)">+</button>
-                    </div>
-                    <ul th:if="${category.isRoot()}" th:each=" subCategory : ${category.getSubCategoryList()}">
-                        <li>
-                            <a href="#" class="category-link" data-category-id="${subCategory.getCategoryId()}">
-                                <span th:text="${subCategory.getCategoryTitle()}"></span>
-                            </a>
-                        </li>
+                <li>
+                    <a href="#">menu2</a>
+                    <ul>
+                        <li><a href="#">text1</a></li>
+                        <li><a href="#">text2</a></li>
+                        <li><a href="#">text3</a></li>
+                        <li><a href="#">text4</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">menu3</a>
+                    <ul>
+                        <li><a href="#">text1</a></li>
+                        <li><a href="#">text2</a></li>
+                        <li><a href="#">text3</a></li>
+                        <li><a href="#">text4</a></li>
                     </ul>
                 </li>
             </ul>
         </aside>
     </section>
-<script>
-    $(document).ready(function(){
-        $('#category-edit').click(function(){
-            var url = '/category/edit';
-            window.location.href=url;
-        });
-    });
-</script>
 </body>
 </html>

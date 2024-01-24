@@ -3,18 +3,18 @@
 <head th:replace="~{layout/layout.html :: head}">
     <title>Write Post</title>
 </head>
+<header th:replace="~{layout/layout.html::header}"></header>
 <body>
     <section th:replace="~{layout/sidebar.html :: section}"></section>
     <div class="container mt-5">
-        <h2>글 작성</h2>
+        <h5>글 작성</h5>
         <div class="category-list">
             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 카테고리 목록
             </a>
-
-            <ul>
+            <ul class="dropdown-menu">
                 <li th:each="category : ${categoryList}">
-                    <a href="#" th:text="category.getCategoryTitle()" onclick="setCategoryId(category.getCategoryId())"></a>
+                    <a class="dropdown-item" href="#" th:text="${category.getCategoryTitle()}" onclick="setCategoryId(${category.categoryId})"></a>
                 </li>
             </ul>
         </div>
@@ -70,7 +70,7 @@
             });
        }
     </script>
-    <script th:src="js/sidebar.js"></script>
-    <script th:src="js/search.js"></script>
+    <script th:src="@{'js/sidebar.js'}"></script>
+    <script th:src="@{'js/search.js'}"></script>
 </body>
 </html>

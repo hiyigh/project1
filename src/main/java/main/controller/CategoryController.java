@@ -15,8 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/category")
 public class CategoryController {
-    private CategoryMethod categoryMethod;
-    private LayoutService layoutService;
+    private final CategoryMethod categoryMethod;
+    private final LayoutService layoutService;
     @GetMapping("edit")
     public String categoryEdit(Model model) {
         layoutService.addLayout(model);

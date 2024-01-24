@@ -2,9 +2,25 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:insert="~{layout/layout.html :: head}">
     <title>About Me</title>
-</head>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-<body th:insert="~{layout/sidebar.html::sidebar}">
+        div {
+            text-align: center;
+        }
+    </style>
+</head>
+<header th:replace="~{layout/layout.html::header}"></header>
+
+<body>
+    <section th:replace="~{layout/sidebar.html::sidebar}">
+    </section>
     <div>
         <p>About me</p>
     </div>

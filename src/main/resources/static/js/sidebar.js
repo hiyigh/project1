@@ -1,4 +1,4 @@
-$(document).ready(function () {
+
     $('.category-link').click(function (event){
        event.preventDefault();
         var categoryId = $(this).data('category-id');
@@ -15,4 +15,10 @@ $(document).ready(function () {
             error: function(error) {console.error('send error', error);}
         });
     });
-});
+
+    $('#category-edit').click(function(){
+        var url = '/category/edit';
+        window.location.href=url;
+    });
+
+
