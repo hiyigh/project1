@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/layout.html::head}"><title>HOME</title></head>
+<head th:replace="~{layout/layout.html::head}">
+    <title>HOME</title>
+</head>
+<header th:replace="~{layout/layout.html::header}"></header>
 <body>
     <section th:replace="~{layout/sidebar.html::section}"></section>
     <img src="/img/your-image.jpg" alt="Home Image" style="width: 100%; height: auto;">
