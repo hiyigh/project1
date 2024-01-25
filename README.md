@@ -24,8 +24,23 @@
 - java
 - spring boot
 
-# 과정
+# 구현
+- 로그인,회원가입,oauth2
+- 이미지 슬라이드 -> javascript
+- 결제 
+- 검색어 필터링
+- 댓글
+- 게시물
+- map
+- 1:1 chat 문의하기
+
+# 
 - 기본적으로 html, thymeleaf 로 로딩
 - 데이터 업데이트시 일부만 변경
   - comment, category 재귀로 서버에서 랜더링 후 데이터를 전달하는 방식 or 브라우저 랜더링하는 방식
-- 
+- complier version error 17 -> 11
+- localhost:8080 sign in ?? -> spring security 의존성에 의한 로그인 화면 -> exclude
+
+- 기능 추가
+- slick slide -> home 화면에서 sidebar 반응 안함..
+- 데이터베이스 데이터가 null 값으로 저장된다.->
