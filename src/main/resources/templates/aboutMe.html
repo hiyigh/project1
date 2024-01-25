@@ -1,17 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{layout/layout.html :: head}">
+<head>
+    <div th:replace="~{layout/layout.html :: head}"></div>
     <title>About Me</title>
     <style>
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        div {
+        .div {
             text-align: center;
         }
     </style>
@@ -21,7 +14,7 @@
 <body>
     <section th:replace="~{layout/sidebar.html::sidebar}">
     </section>
-    <div>
+    <div class="div">
         <p>About me</p>
     </div>
 </body>

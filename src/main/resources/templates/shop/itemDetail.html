@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{layout/layout.html::head}"></div>
+    <title>Item Detail</title>
+    <style>
+        body{
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin:0;
+        }
+        .item-explanation{
+            text-align:center;
+        }
+        .item-url,
+        .item-title,
+        .item-detail,
+        .item-price,
+        .item-hits {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<header th:replace="~{layout/layout.html::header}"></header>
+<body>
+<section th:replace="~{layout/sidebar.html::sidebar}"></section>
+    <div class="item-explanation">
+        <div class="item-url">
+            <img th:src="${item.imgUrl}" class="item-img">
+        </div>
+        <div class="item-title">
+            <span class="title" th:text="${item.title}"></span>
+        </div>
+        <div class="item-detail">
+            <span class="detail" th:text="${item.detail}"></span>
+        </div>
+        <div class="item-price">
+            <span class="price" th:text="${item.price}"></span>
+        </div>
+        <div class="item-hits">
+            <span class="hits" th:text="${item.hits}"></span>
+        </div>
+    </div>
+    <div class="item-buy">
+        <button th:if="${item.inventoryCount == 0}" type="button" class="btn" data-item-id="${item.itemId}">buy</button>
+    </div>
+    <div class="item-basket">
+        <button type="button" class="btn" data-item-id="${item.itemId}">basket</button>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('.item-buy button').click(function(){
+                var itemId = $(this).data('item-id');
+                $.ajax({
+                    type: 'GET',
+                    url: '/shop/buy',
+                    data: {itemId: itemId},
+                    success: function(response) {
+                        alert('구매창으로 이동');
+                    },
+                    error: function(error) {
+                        alert('구매 실패');
+                    }
+                });
+            });
+
+            $('.item-basket button').click(function(){
+                var itemId = $(this).data('item-id');
+                $.ajax({
+                    type: 'GET',
+                    url: '/shop/basket',
+                    data: {itemId: itemId},
+                    success: function(response) {
+                        alert('장바구니로 이동');
+                    },
+                    error: function(error) {
+                        alert('등록 실패');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

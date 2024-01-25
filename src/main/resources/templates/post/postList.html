@@ -3,27 +3,51 @@
 <head th:replace="~{layout/layout.html::head}">
     <title>postList</title>
 </head>
+<header>
+    <div th:replace="~{layout/layout.html::header}"></div>
+    <style>
+        .post-list-box{
+            max-width:600px;
+            margin:0 auto;
+            padding:20px;
+            text-align: center; /* 가로 중앙 정렬 */
+            border: 2px solid #ccc; /* 테두리 추가, 필요에 따라 조절 */
+        }
+        .pagination{
+            text-align: center;
+            margin-top:20px;
+        }
+        .pagination .page-item{
+            display inline-block;
+            margin-right: 5px;
+        }
+    </style>
+</header>
+
 <body>
     <section th:replace="~{layout/sidebar.html::section}"></section>
     <section>
-    <div>
-        <ul class="post-list" data-category-id="${categoryId}">
+<div class="post-list-box">
+    <div class="post-list">
+        <ul>
             <li th:each="post : ${postList}" >
                 <div>
-                    <a th:href="@{'/post/view?postId=' + ${post.getPostId()} + 1}">
+                    <a th:href="@{'/post/view?postId=' + ${post.getPostId()}}">
                         <span th:text="${post.getPostTitle()}"></span>
                     </a>
                 </div>
             </li>
         </ul>
     </div>
-
+    <div class="post-write-button">
+        <button th:if="${user}" class="btn" type="button">글 작성</button>
+    </div>
     <nav aria-label="Page navigation">
         <ul class="pagination">
             <li th:if="${page.curPageNum > 1}" class="page-item">
                 <a data-page="${page.curPageNum - 1}" class="page-link">Previous</a>
             </li>
-            <li th:each="page : ${#numbers.sequence(1, page.lastPageNum)}" th:class="${page == page.curPageNum} ? 'page-item active' : 'page-item'">
+            <li th:each="curPage : ${#numbers.sequence(1, page.lastPageNum)}" th:class="${curPage == page.curPageNum} ? 'page-item active' : 'page-item'">
                 <a data-page="${page.curPageNum}" class="page-link" th:text="${page.curPageNum}"></a>
             </li>
             <li th:if="${page.curPageNum < page.lastPageNum}" class="page-item">
@@ -31,8 +55,10 @@
             </li>
         </ul>
     </nav>
+</div>
     </section>
     <script>
+
         $(document).ready(function () {
             $('.pagination .page-link').click(function (event) {
                 event.preventDefault();
@@ -63,9 +89,23 @@
                     }
                 });
             });
+            $('.post-write-button').click(function(){
+                $.ajax({
+                    type:'GET',
+                    url:'/post/write',
+                    success:function(response){
+                        console.log('write success',response)
+                        alert("글 작성 성공");
+                    },
+                    error:function(error){
+                        console.log('write fail',error)
+                        alert("글 작성 실패");
+                    }
+                });
+            });
         });
     </script>
-    <script th:src="js/sidebar.js"></script>
-    <script th:src="js/search.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/search.js"></script>
 </body>
 </html>

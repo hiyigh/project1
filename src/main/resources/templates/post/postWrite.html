@@ -2,10 +2,18 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/layout.html :: head}">
     <title>Write Post</title>
+    <style>
+        .container {
+            max-width: 600px;
+        }
+        .category-list {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <header th:replace="~{layout/layout.html::header}"></header>
 <body>
-    <section th:replace="~{layout/sidebar.html :: section}"></section>
+
     <div class="container mt-5">
         <h5>글 작성</h5>
         <div class="category-list">
@@ -21,18 +29,18 @@
         <div>
             <input type="hidden" id="categoryId" name="categoryId" data-category-id="">
         </div>
-        <div>
-            <label for="title" class="form label">제목</label>
+        <div class="mb-3">
+            <label for="title" class="form-label">제목</label>
             <input type="text" class="form-control" id="title">
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">내용</label>
             <textarea class="form-control" id="content" rows="10"></textarea>
         </div>
+        <input type="hidden" id="userId" data-user-id="${user.userId}">
+        <button type="button" class="btn btn-primary" onclick="writePost()">글 작성</button>
     </div>
-    <input type="hidden" id="userId" data-user-id="${user.userId}">
-    <button th:if="${user}" type="button" class="btn btn-primary" onclick="writePost()">글 작성</button>
-    <script>
+<script>
         function getCurrentDateTime() {
             var now = new Date();
             var formattedDateTime = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() +
@@ -49,18 +57,19 @@
             var title = $('#title').val();
             var content = $('#content').val();
             var categoryId = $('#categoryId').data('category-id');
-            var createdTime = getCurrentDatTime();
+            var createdTime = getCurrentDateTime();
 
             $.ajax({
                 type:'POST',
                 url:'/post/write',
                 data:{
-                    userId: userId;
-                    postTitle: title;
-                    postContent: content;
-                    categoryId: categoryId;
-                    createdTime : createdTime;
+                    userId: userId,
+                    postTitle: title,
+                    postContent: content,
+                    categoryId: categoryId,
+                    createdTime : createdTime
                 },
+                contentType:'application/json',
                 success: function(response){
                     alert("작성 성공");
                 },
@@ -68,9 +77,10 @@
                     alert("작성 실패");
                 }
             });
-       }
+        }
     </script>
-    <script th:src="@{'js/sidebar.js'}"></script>
-    <script th:src="@{'js/search.js'}"></script>
+<script th:src="@{'/js/sidebar.js'}"></script>
+<script th:src="@{'/js/search.js'}"></script>
+
 </body>
 </html>

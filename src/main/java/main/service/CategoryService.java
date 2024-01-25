@@ -16,4 +16,27 @@ public class CategoryService implements CategoryMethod {
     public List<Category> getAllCategoryList() {
         return categoryRepoMethod.getAllCategoryList();
     }
+
+    @Override
+    public void add(Category category) {
+        categoryRepoMethod.add(category);
+    }
+
+    @Override
+    public void delete(Long categoryId) {
+        categoryRepoMethod.delete(categoryId);
+    }
+
+    @Override
+    public void update(Category category) {
+        categoryRepoMethod.update(category);
+    }
+    @Override
+    public List<Category> getRootCategoryList() {
+        return categoryRepoMethod.getRootCategoryList();
+    }
+    @Override
+    public List<Category> getSubCategoryList(Long categoryId) {
+        return categoryRepoMethod.getSubCategoryList(categoryId);
+    }
 }

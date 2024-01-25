@@ -9,5 +9,5 @@ public class CategoryDto {
     private String categoryTitle;
     private Long mainCategoryId;
     private int postCount;
-    private List<Category> subCategoryList;
+    private boolean isRoot;
 }

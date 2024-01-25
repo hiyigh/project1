@@ -1,4 +1,3 @@
-
     $('.category-link').click(function (event){
        event.preventDefault();
         var categoryId = $(this).data('category-id');

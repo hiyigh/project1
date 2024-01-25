@@ -2,15 +2,13 @@ package main.controller;
 
 import lombok.RequiredArgsConstructor;
 import main.dto.PostDto;
-import main.model.Comment;
-import main.model.Post;
+import main.model.*;
+import main.service.CategoryService;
 import main.service.CommentService;
 import main.service.LayoutService;
 import main.service.PostService;
-import main.service.method.CommentMethod;
-import main.service.method.PostMethod;
+import main.service.method.CategoryMethod;
 import main.service.paging.Pagination;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,21 +58,14 @@ public class PostController {
         model.addAttribute("commentList", commentList);
         return "/post/postView";
     }
-    @GetMapping("/list")
-    public String getPostList(@RequestParam Long categoryId ,@RequestParam int currentPage ,Model model) {
+    @GetMapping("/category/{categoryId}")
+    public String getPostList(Model model , @PathVariable Long categoryId) {
         layoutService.addLayout(model);
-        List<Post> postList;
-        Pagination page;
-        if (categoryId == -1) {
-            postList = postMethod.getAllPosts();
-            page =  Pagination.paging(currentPage, postList.size());
-        } else {
-            postList = postMethod.getPostByCategory(categoryId);
-            page =  Pagination.paging(currentPage, postList.size());
-        }
-        model.addAttribute("postList", postList);
-        model.addAttribute("categoryId", categoryId);
+        List<Post> postList = postMethod.getPostByCategory(categoryId);
+        Pagination page = Pagination.paging(1,postList.size());
+
         model.addAttribute("page", page);
+        model.addAttribute("postList", postList);
         return "/post/postList";
     }
     @GetMapping("/paging")
@@ -88,4 +79,5 @@ public class PostController {
         }
         return pagingList;
     }
+
 }

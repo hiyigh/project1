@@ -3,11 +3,16 @@ package main.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import main.model.enumeration.Role;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
+@Setter
 @RequiredArgsConstructor
 public class User extends Time {
     private Long userId;
@@ -16,6 +21,9 @@ public class User extends Time {
     private String userPassword;
     private boolean userSex;
     private Role role;
+    private List<Integer> basket;
+    private List<Integer> commentHistory;
+    private List<Integer> postHistory;
     @Builder
     public void builder(Long userId, String userName, String userEmail, String userPassword,
                         boolean userSex, LocalDateTime createdTime, Role role) {
@@ -26,6 +34,7 @@ public class User extends Time {
         this.userSex = userSex;
         super.createdTime = createdTime;
         this.role = role;
+        this.basket = new ArrayList<>();
     }
     @Override
     public boolean equals(Object o) {

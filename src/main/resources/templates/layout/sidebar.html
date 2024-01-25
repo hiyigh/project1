@@ -14,31 +14,22 @@
                 </section>
             </section>
             <ul>
-                <li>
-                    <a href="#">menu1</a>
+                <li th:each="menu : ${menus}">
+                    <a th:if="${menu.link == '/post/category'}" th:href="${menu.link} + ${menu.id}">
+                        <span th:text="${menu.text}"></span>
+                    </a>
+                    <a th:unless="${menu.link == '/post/category'}" th:href="${menu.link}">
+                        <span th:text="${menu.text}"></span>
+                    </a>
                     <ul>
-                        <li><a href="#">text1</a></li>
-                        <li><a href="#">text2</a></li>
-                        <li><a href="#">text3</a></li>
-                        <li><a href="#">text4</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">menu2</a>
-                    <ul>
-                        <li><a href="#">text1</a></li>
-                        <li><a href="#">text2</a></li>
-                        <li><a href="#">text3</a></li>
-                        <li><a href="#">text4</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">menu3</a>
-                    <ul>
-                        <li><a href="#">text1</a></li>
-                        <li><a href="#">text2</a></li>
-                        <li><a href="#">text3</a></li>
-                        <li><a href="#">text4</a></li>
+                        <li th:each="subMenu : ${menu.subMenu}">
+                            <a th:if="${subMenu.link == '/post/category'}" th:href="${subMenu.link + subMenu.id}">
+                                <span th:text="${subMenu.text}"></span>
+                            </a>
+                            <a th:unless="${subMenu.link == '/post/category'}" th:href="${subMenu.link}">
+                                <span th:text="${subMenu.text}"></span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

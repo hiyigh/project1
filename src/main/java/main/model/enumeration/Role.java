@@ -1,4 +1,4 @@
-package main.model;
+package main.model.enumeration;
 
 public enum Role {
     ROLE_ADMIN,

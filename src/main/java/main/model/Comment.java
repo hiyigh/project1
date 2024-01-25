@@ -3,11 +3,13 @@ package main.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @RequiredArgsConstructor
 public class Comment extends Time {
     private Long commentId;
@@ -32,9 +34,5 @@ public class Comment extends Time {
         this.commentContent = commentContent;
         this.isSecret = isSecret;
         this.mainCommentId = mainCommentId;
-    }
-
-    public void setCommentContent(String editComment) {
-        this.commentContent = editComment;
     }
 }

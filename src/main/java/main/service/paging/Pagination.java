@@ -1,9 +1,7 @@
 package main.service.paging;
 
 import lombok.Getter;
-import main.model.Post;
 
-import java.util.List;
 @Getter
 public class Pagination {
 
