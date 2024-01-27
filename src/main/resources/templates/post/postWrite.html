@@ -16,18 +16,11 @@
 
     <div class="container mt-5">
         <h5>글 작성</h5>
-        <div class="category-list">
-            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                카테고리 목록
-            </a>
-            <ul class="dropdown-menu">
-                <li th:each="category : ${categoryList}">
-                    <a class="dropdown-item" href="#" th:text="${category.getCategoryTitle()}" onclick="setCategoryId(${category.categoryId})"></a>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <input type="hidden" id="categoryId" name="categoryId" data-category-id="">
+        <div class="mt-3 mb-3">
+            <select id="categoryTitle" name="categoryTitle" class="form-select ps-3" aria-label="Select category">
+                <option selected>카테고리를 선택해주세요</option>
+                <option th:each="categoryOption : ${categoryList}"  th:attr="data-category-id=${categoryOption.getCategoryId()}" th:text="${categoryOption.getCategoryTitle()}" >Java</option>
+            </select>
         </div>
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
@@ -37,39 +30,36 @@
             <label for="content" class="form-label">내용</label>
             <textarea class="form-control" id="content" rows="10"></textarea>
         </div>
-        <input type="hidden" id="userId" data-user-id="${user.userId}">
+
+        <div th:if="${#authorization.expression('isAuthenticated')}">
+        </div>
         <button type="button" class="btn btn-primary" onclick="writePost()">글 작성</button>
     </div>
 <script>
-        function getCurrentDateTime() {
-            var now = new Date();
-            var formattedDateTime = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() +
-                ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-            return formattedDateTime;
-        }
-
-        function setCategoryId(categoryId) {
-            $('#categoryId').val(categoryId);
-        }
+        var categoryId;
+        $('#categoryTitle').change(function(){
+            categoryId = $(this).find(':selected').data('category-id');
+console.log("Category ID:", $(this).find(':selected').data('category-id'));
+        });
 
         function writePost() {
-            var userId = $('#userId').data('user-id');
+            var userId = $('#userId').val();
             var title = $('#title').val();
             var content = $('#content').val();
-            var categoryId = $('#categoryId').data('category-id');
-            var createdTime = getCurrentDateTime();
 
+console.log("user ID:", $('#userId').data('user-id'));
+console.log("categoryId:", categoryId);
+console.log("userId:", userId);
             $.ajax({
                 type:'POST',
                 url:'/post/write',
-                data:{
+                data: JSON.stringify({
                     userId: userId,
                     postTitle: title,
                     postContent: content,
-                    categoryId: categoryId,
-                    createdTime : createdTime
-                },
-                contentType:'application/json',
+                    categoryId: categoryId
+                }),
+                contentType: 'application/json',
                 success: function(response){
                     alert("작성 성공");
                 },

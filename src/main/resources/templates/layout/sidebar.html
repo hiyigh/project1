@@ -21,6 +21,9 @@
                     <a th:unless="${menu.link == '/post/category'}" th:href="${menu.link}">
                         <span th:text="${menu.text}"></span>
                     </a>
+                    <a th:if="${menu.link == '/post/category'}" th:href="@{'/post/write'}">
+                        <span>글 작성</span>
+                    </a>
                     <ul>
                         <li th:each="subMenu : ${menu.subMenu}">
                             <a th:if="${subMenu.link == '/post/category'}" th:href="${subMenu.link + subMenu.id}">

@@ -3,9 +3,44 @@
 <head>
     <div th:replace="~{layout/layout.html::head}"></div>
     <title>Login</title>
+    <style>
+        .style{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            height:100vh;
+            margin:0;
+        }
+        .user-input-email
+        .user-input-password{
+            margin-bottom: 100px;
+        }
+    </style>
 </head>
 <header th:replace="~{layout/layout.html::header}"></header>
 <body>
 
+    <div class=style>
+        <form action="/login" method="post">
+            <section class="user-input-email">
+                <label for="user-email">Email:</label>
+                <input type="email" id="user-email" name="userEmail" placeholder="enter your email">
+            </section>
+            <seciton class="user-input-password">
+                <label for="user-password">Password:</label>
+                <input type="password" id="user-password" name="userPassword" placeholder="enter your password">
+            </seciton>
+            <section>
+                <button type="submit" class="btn">로그인</button>
+                <button id="enroll" type="button" class="btn">회원가입</button>
+                <button id="google-login" type="button" class="btn">구글</button>
+            </section>
+        </form>
+    </div>
+<script>
+    $('#enroll').click(function(){
+        window.location.href='/enroll';
+    });
+</script>
 </body>
 </html>

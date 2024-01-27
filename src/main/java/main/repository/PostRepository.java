@@ -3,6 +3,7 @@ package main.repository;
 import lombok.RequiredArgsConstructor;
 import main.model.Post;
 import main.repository.method.PostRepoMethod;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,9 +15,8 @@ public class PostRepository implements PostRepoMethod {
     private final JdbcTemplate jdbcTemplate;
     @Override
     public void add(Post post) {
-        String sql = "insert into Posts(postId, postTitle, postContent, categoryId, postCreatedTime) values (?,?,?,?,?)";
-        jdbcTemplate.update(sql, post.getPostId(), post.getPostTitle(),
-                post.getPostContent(), post.getCategoryId(), post.getCreatedTime());
+        String sql = "insert into Posts(postTitle, postContent, categoryId, createdTime) values (?,?,?,?)";
+        jdbcTemplate.update(sql, post.getPostTitle(),  post.getPostContent(), post.getCategoryId(), post.getCreatedTime());
     }
     @Override
     public void delete(Long postId) {
@@ -56,6 +56,10 @@ public class PostRepository implements PostRepoMethod {
     }
     @Override
     public Long getLastPostIdOrNull() {
-        return jdbcTemplate.queryForObject("select postId from Posts order by postId desc limit 1", Long.class);
+        try {
+            return jdbcTemplate.queryForObject("select postId from Posts order by postId desc limit 1", Long.class);
+        } catch(EmptyResultDataAccessException e) {
+            return 0l;
+        }
     }
 }

@@ -17,4 +17,10 @@ public interface UserRepoMethod {
     List<Integer> getPostHistory(Long userId);
     List<Integer> getBasket(Long userId);
     void updateUserHistory(Integer userId, Integer newData, HistoryType type);
+
+    void add(User user);
+
+    User find(Long userId);
+
+    Long getLastUserId();
 }

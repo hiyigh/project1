@@ -37,3 +37,4 @@ out/
 .vscode/
 
 application-mariadb.properties
+application-oauth2.properties

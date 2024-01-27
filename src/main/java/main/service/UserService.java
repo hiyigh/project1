@@ -14,6 +14,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService implements UserMethod {
     private final UserRepository userRepoMethod;
+
+    @Override
+    public User find(Long userId) {
+        return userRepoMethod.find(userId);
+    }
+
+    @Override
+    public void add(User user) {
+        userRepoMethod.add(user);
+    }
+
     @Override
     public User getUserById(Long userId) {
         return userRepoMethod.getUserById(userId);
@@ -52,5 +63,10 @@ public class UserService implements UserMethod {
     @Override
     public void updateUserHistory(Integer userId, Integer newData, HistoryType type) {
         userRepoMethod.updateUserHistory(userId, newData, type);
+    }
+
+    @Override
+    public Long getLastUserId() {
+        return userRepoMethod.getLastUserId();
     }
 }

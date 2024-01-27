@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import main.model.enumeration.HistoryType;
 import main.model.User;
 import main.repository.method.UserRepoMethod;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,10 +16,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserRepository implements UserRepoMethod {
     private final JdbcTemplate jdbcTemplate;
+
     @Override
-    public User getUserById(Long userId) {
+    public void add(User user) {
+        jdbcTemplate.update("insert into Users (userName, userEmail, userPassword, userSex, role, createdTime, basket, commentHistory, postHistory) " +
+                        "values (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                user.getUserName(), user.getUserEmail(), user.getUserPassword(), user.isUserSex(), user.getRole().toString(),
+                user.getCreatedTime(), user.getBasket(), user.getCommentHistory(), user.getPostHistory());
+    }
+
+
+    @Override
+    public User find(Long userId) {
         return jdbcTemplate.queryForObject("select * from Users where userId = ?", new Object[]{userId},
                 new BeanPropertyRowMapper<>(User.class));
+    }
+
+    @Override
+    public User getUserById(Long userId) {
+        try {
+            User user = jdbcTemplate.queryForObject("select * from Users where userId = ?", new Object[]{userId},
+                    new BeanPropertyRowMapper<>(User.class));
+            return user;
+        }catch(EmptyResultDataAccessException e) {
+            return null;
+        }
     }
     @Override
     public User getUserByNameOrNull(String userName) {
@@ -27,8 +49,14 @@ public class UserRepository implements UserRepoMethod {
     }
     @Override
     public User getUserByEmailOrNull(String userEmail) {
-        return jdbcTemplate.queryForObject("select * from Users where userEmail like ?", new Object[]{"%"+ userEmail + "%"},
+        User user = null;
+        try {
+            user = jdbcTemplate.queryForObject("select * from Users where userEmail like ?", new Object[]{"%"+ userEmail + "%"},
                 new BeanPropertyRowMapper<>(User.class));
+            return user;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
     @Override
     public List<User> getAllUsers() {
@@ -103,5 +131,15 @@ public class UserRepository implements UserRepoMethod {
             }
         }
         return result;
+    }
+
+    @Override
+    public Long getLastUserId() {
+        try {
+            Long id =  jdbcTemplate.queryForObject("select userId from Users order by userId desc", Long.class);
+            return id;
+        } catch(EmptyResultDataAccessException e){
+            return 1L;
+        }
     }
 }

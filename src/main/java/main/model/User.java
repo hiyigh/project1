@@ -6,10 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import main.model.enumeration.Role;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -21,30 +19,28 @@ public class User extends Time {
     private String userPassword;
     private boolean userSex;
     private Role role;
-    private List<Integer> basket;
-    private List<Integer> commentHistory;
-    private List<Integer> postHistory;
+
+    private List<Long> basket = new ArrayList<>();
+    private List<Long> commentHistory = new ArrayList<>();
+    private List<Long> postHistory = new ArrayList<>();
+
+    private String provider;
+    private String providerId;
     @Builder
-    public void builder(Long userId, String userName, String userEmail, String userPassword,
-                        boolean userSex, LocalDateTime createdTime, Role role) {
-        this.userId = userId;
+    public User(String userName, String userEmail, String userPassword, boolean userSex, Role role) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userSex = userSex;
-        super.createdTime = createdTime;
         this.role = role;
-        this.basket = new ArrayList<>();
     }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(userId, user.userId) && Objects.equals(userName, user.userName) && Objects.equals(userEmail, user.userEmail) && Objects.equals(userPassword, user.userPassword) && Objects.equals(userSex, user.userSex);
-    }
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, userName, userEmail, userPassword, userSex);
+    @Builder
+    public User(String userName, String userPassword, String userEmail, Role role, String provider, String providerId) {
+        this.userName = userName;
+        this.userPassword = userPassword;
+        this.userEmail = userEmail;
+        this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 }

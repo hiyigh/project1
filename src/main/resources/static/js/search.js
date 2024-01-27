@@ -1,8 +1,13 @@
+var searchId;
+function handleSearchChange(selectedValue){
+    searchId = selectedValue;
+}
 
-$('#searchForm').submit(function (event){
+$('#searchForm').submit(function (event) {
         event.preventDefault();
-        var searchId = $('.search-type').data('search-id');
+
         var keyword = $('#searchInput').val();
+        searchId = $('#search-dropdown').val();
 
         $.ajax({
             type:'POST',
