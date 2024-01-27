@@ -26,13 +26,20 @@
 
 # 구현
 - 로그인,회원가입,oauth2
+  - 회원 프로필 추가 
 - 이미지 슬라이드 -> javascript
-- 결제 
+
 - 검색어 필터링
+  - 조건별로 필터링 할 수 있도록
 - 댓글
+  
 - 게시물
-- map
-- 1:1 chat 문의하기
+- 쇼핑
+  - 결제
+  - 장바구니 - 회원 기록
+    
+- 문의하기
+  - socket 전달
 
 # 
 - 기본적으로 html, thymeleaf 로 로딩
@@ -43,4 +50,6 @@
 
 - 기능 추가
 - slick slide -> home 화면에서 sidebar 반응 안함..
-- 데이터베이스 데이터가 null 값으로 저장된다.->
+- 데이터베이스 데이터가 null 값으로 저장된다.-> BeanPropertyRowMapper 값을 가져와서 setter 를 통해 값을 할당해준다 -> setter 가 없었다.
+
+- 
