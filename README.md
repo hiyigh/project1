@@ -39,7 +39,7 @@
   - 장바구니 - 회원 기록
     
 - 문의하기
-  - socket 전달
+
 
 # 
 - 기본적으로 html, thymeleaf 로 로딩
@@ -47,9 +47,12 @@
   - comment, category 재귀로 서버에서 랜더링 후 데이터를 전달하는 방식 or 브라우저 랜더링하는 방식
 - complier version error 17 -> 11
 - localhost:8080 sign in ?? -> spring security 의존성에 의한 로그인 화면 -> exclude
+- spring security form login & oauth2 login
+- security -> http.csrf().disable(); 설정 -> 403 forbidden
 
 - 기능 추가
 - slick slide -> home 화면에서 sidebar 반응 안함..
 - 데이터베이스 데이터가 null 값으로 저장된다.-> BeanPropertyRowMapper 값을 가져와서 setter 를 통해 값을 할당해준다 -> setter 가 없었다.
 
-- 
+- jdbcTemplate queryForObject 에서 값이 없을 경우 -> EmptyResultDataAccessException
+- thymeleaf ${} 는 문자열로 랜더링 
