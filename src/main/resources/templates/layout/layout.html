@@ -67,15 +67,22 @@
 
                 <button class="btn btn-outline-success" type="submit">Search</button>
                 <button th:unless="${#authorization.expression('isAuthenticated()')}"
-                        type="button" class="btn btn-outline-success" id="loginButton">Login</button>
+                        type="button" class="btn btn-outline-success" id="loginButton" data-bs-toggle="modal"
+                        data-bs-target="#loginModal">Login</button>
+                <a th:if="${#authorization.expression('isAuthenticated()')}" class="btn" id="logoutButton"
+                   href="/logout" >Logout</a>
+
+
+                <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div th:replace="~{login.html :: content}"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
-    <script>
-        $('#loginButton').click(function(){
-            window.location.href= '/login';
-        });
-    </script>
 </header>
 </html>
 

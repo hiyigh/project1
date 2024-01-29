@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .userService(principalOauth2UserService);
 
         http    .logout()
+                .logoutUrl("/logout")
                 .deleteCookies("remember-me")
                 .logoutSuccessUrl("/");
     }

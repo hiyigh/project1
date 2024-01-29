@@ -30,8 +30,8 @@
         <div class="item-url">
             <img th:src="${item.imgUrl}" class="item-img">
         </div>
-        <div class="item-title">
-            <span class="title" th:text="${item.title}"></span>
+        <div class="item-name">
+            <span class="itemName" th:text="${item.itemName}"></span>
         </div>
         <div class="item-detail">
             <span class="detail" th:text="${item.detail}"></span>
@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="item-buy">
-        <button th:if="${item.inventoryCount == 0}" type="button" class="btn" data-item-id="${item.itemId}">buy</button>
+        <button th:unless="${item.inventoryCount == 0}" type="button" class="btn" data-item-id="${item.itemId}">buy</button>
     </div>
     <div class="item-basket">
         <button type="button" class="btn" data-item-id="${item.itemId}">basket</button>

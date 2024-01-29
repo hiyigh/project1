@@ -3,9 +3,25 @@
 <head>
     <div th:replace="~{layout/layout.html::head}"></div>
     <title>shop</title>
+    <link rel="stylesheet" href="./css/shopList.css"/>
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;700&display=swap" rel="stylesheet" />
     <style>
-        .item-box{
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3,300px);
+            gap: 20px;
         }
+
+        .detail-goods {
+            text-align: center;
+        }
+        .item-img{
+            border-style: hidden;
+        }
+
     </style>
 </head>
 <header th:replace="~{layout/layout.html::header}"></header>
@@ -21,32 +37,36 @@
             <li><a class="dropdown-item" data-item-id="5">높은가격순</a></li>
         </ul>
     </div>
-    <div class="item-box">
-        <ul>
-            <li th:each="item : ${items}">
-                <a th:href="#" class="item-link" style="cursor:pointer" data-item-id="${item.itemId}"></a>
-                <img th:src="${item.imgUrl}" class="item-img">
-                <div class="item-text">
-                    <span th:text="${item.title}" class="item-title"></span>
-                </div>
-                <div class="item-price">
-                    <span th:text="${item.price}" class="item-price"></span>
-                </div>
-            </li>
-        </ul>
-    </div>
+    <main class="detail-box">
+        <div class="detail-container">
+            <div class="detail-goods-photo">
+                <ul class="item-grid">
+                    <li th:each="item : ${items}" class="detail-goods">
+                        <a href="#" class="item-link" style="cursor:pointer" data-item-id="${item.itemId}"></a>
+                        <img th:src="${item.imgUrl}" class="item-img">
+                        <div class="item-text">
+                            <span th:text="${item.itemName}" class="detail-name"></span>
+                        </div>
+                        <div class="item-price">
+                            <span th:text="${item.price}" class="detail-price"></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
     <div class="add-item" th:if="${userRole != null && userRole.equals('[ROLE_ADMIN]')}">
-        <button class="btn" type="button" data-item-add="add">제품 추가</button>
-        <button class="btn" type="button" data-item-delet="delete">제품 삭제</button>
+        <button id="add-item" class="btn" type="button" data-item-add="add">제품 추가</button>
+        <button id="delete-item" class="btn" type="button" data-item-delete="delete">제품 삭제</button>
     </div>
 <script>
-
     $('.dropdown-item').click(function(){
-        var itemId = $(this).data('item-id');
+        var orderId = $(this).data('item-id');
+
         $.ajax({
             type:'GET',
             url:'/shop/order',
-            data:{itemId : itemId},
+            data:{orderId : orderId},
             success:function(response){
                 var html = "";
                 for (let i = 0; i < response.items.length; i++) {
@@ -80,6 +100,30 @@
             data:{itemId:itemId},
             success:function(response){console.log('item success',response)},
             error:function(error){console.log('item error',error)}
+        });
+    });
+    $('#add-item').click(function(){
+        $.ajax({
+            type:'GET',
+            url:'/shop/add',
+            success:function(){
+                alert('item add');
+            },
+            error:function(){
+                alert('item add error');
+            }
+        });
+    });
+    $('#add-delete').click(function(){
+        $.ajax({
+            type:'GET',
+            url:'/shop/delete',
+            success:function(){
+                alert('item delete');
+            },
+            error:function(){
+                alert('item delete error');
+            }
         });
     });
 </script>

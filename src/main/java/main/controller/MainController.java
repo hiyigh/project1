@@ -110,15 +110,18 @@ public class MainController {
         List<Menu> menus = getMenu(EMenu.SHOP);
         List<Item> items =  shoppingService.getItemsByDesc();
         String userRole = null;
+
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
             if (principal instanceof UserDetails || principal instanceof OAuth2User) {
                 PrincipalDetails userDetails = (PrincipalDetails) principal;
                 userRole = userDetails.getAuthorities().toString();
-                System.out.println("userRole :" + userRole);
             }
         }
-        System.out.println("userRole :" + userRole);
+        for (int i = 0; i< items.size(); ++i) {
+            System.out.println("url :" + items.get(i).getImgUrl());
+        }
+
         model.addAttribute("userRole", userRole);
         model.addAttribute("items", items);
         model.addAttribute("menus", menus);

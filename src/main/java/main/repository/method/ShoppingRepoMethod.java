@@ -1,5 +1,6 @@
 package main.repository.method;
 
+import main.dto.ItemDto;
 import main.model.Item;
 
 import java.util.List;
@@ -24,4 +25,7 @@ public interface ShoppingRepoMethod {
     List<Item> getItemsByDesc();
 
     List<Item> getItemsByKeywordOrNull(String keyword);
+
+    void deleteItem(int itemId);
+    void addItem(ItemDto itemDto);
 }

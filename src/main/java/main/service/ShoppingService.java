@@ -1,6 +1,7 @@
 package main.service;
 
 import lombok.RequiredArgsConstructor;
+import main.dto.ItemDto;
 import main.model.Item;
 import main.repository.method.ShoppingRepoMethod;
 import main.service.method.ShoppingMethod;
@@ -59,5 +60,15 @@ public class ShoppingService implements ShoppingMethod {
     @Override
     public List<Item> getItemsByDesc() {
         return shopRepoMethod.getItemsByDesc();
+    }
+
+    @Override
+    public void deleteItem(int itemId) {
+        shopRepoMethod.deleteItem(itemId);
+    }
+
+    @Override
+    public void addItem(ItemDto itemDto) {
+        shopRepoMethod.addItem(itemDto);
     }
 }

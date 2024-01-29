@@ -1,6 +1,7 @@
 package main.repository;
 
 import lombok.RequiredArgsConstructor;
+import main.dto.ItemDto;
 import main.model.Item;
 import main.repository.method.ShoppingRepoMethod;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -65,5 +66,16 @@ public class ShoppingRepository implements ShoppingRepoMethod {
     public List<Item> getItemsByKeywordOrNull(String keyword) {
         return jdbcTemplate.query("select * from Items where itemName like ? or itemDetail like ?",
                 new Object[]{"%"+ keyword +"%", "%"+ keyword +"%"}, new BeanPropertyRowMapper<>(Item.class));
+    }
+
+    @Override
+    public void deleteItem(int itemId) {
+        jdbcTemplate.update("delete from Items where itemId = ?", itemId);
+    }
+
+    @Override
+    public void addItem(ItemDto itemDto) {
+        String sql = "insert into Items (imgUrl, itemName, price, detail, hits, inventoryCount, soldCount) values (?,?,?,?,0,?,0)";
+        jdbcTemplate.update(sql, itemDto.getImgUrl(), itemDto.getItemName(), itemDto.getPrice(), itemDto.getDetail(), itemDto.getInventoryCount());
     }
 }

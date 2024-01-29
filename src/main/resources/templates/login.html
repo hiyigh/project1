@@ -18,24 +18,32 @@
     </style>
 </head>
 <header th:replace="~{layout/layout.html::header}"></header>
-<body>
+<body th:fragment="content">
 
-    <div class=style>
-        <form action="/login" method="post">
-            <section class="user-input-email">
-                <label for="user-email">Email:</label>
-                <input type="email" id="user-email" name="userEmail" placeholder="enter your email">
-            </section>
-            <seciton class="user-input-password">
-                <label for="user-password">Password:</label>
-                <input type="password" id="user-password" name="userPassword" placeholder="enter your password">
-            </seciton>
-            <section>
-                <button type="submit" class="btn">로그인</button>
-                <button id="enroll" type="button" class="btn">회원가입</button>
-                <button id="google-login" type="button" class="btn">구글</button>
-            </section>
+    <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">로그인</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <form method="post" action="/login">
+            <div class="form-group">
+                <label for="user-email">Email: </label>
+                <input type="email" id="user-email" name="userEmail" placeholder="enter you Email">
+                <div class="valid-feedback">check</div>
+                <div class="invalid-feedback">please enter email</div>
+            </div>
+            <div class="form-group">
+                <label for="user-password" >Password: </label>
+                <input type="password" id="user-password" name="userPassword" placeholder="enter you Password">
+                <div class="valid-feedback">check</div>
+                <div class="invalid-feedback">please enter password</div>
+            </div>
+            <button type="submit" class="btn" style="margin-left:50%;">로그인</button>
+            <button type="button" class="btn" id="enroll">회원가입</button>
         </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn" data-bs-dismiss="modal">취소</button>
     </div>
 <script>
     $('#enroll').click(function(){
