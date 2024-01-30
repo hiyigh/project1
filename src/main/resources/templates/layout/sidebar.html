@@ -16,24 +16,24 @@
 
             <ul th:each="menu : ${menus}">
                 <li>
-                    <a th:if="${menu.link == '/post/category'}" th:href="${menu.link} + ${menu.id}">
+                    <a th:if="${menu.link == '/post/category'}" th:href="${menu.link} + ${menu.id}" >
                         <span th:text="${menu.text}"></span>
                     </a>
-                    <a th:unless="${menu.link == '/post/category'}" th:href="${menu.link}">
+                    <a th:if="${menu.link != '/post/category'} and ${userRole} != 'default' " th:href="${menu.link}">
                         <span th:text="${menu.text}"></span>
                     </a>
                 </li>
-                <li th:if="${menu.link == '/post/category'}">
+                <li th:if="${menu.link == '/post/category'} and ${userRole} != 'default'">
                     <a th:href="@{'/post/write'}">
                         <span>글 작성</span>
                     </a>
                 </li>
-                <li th:unless="${menu.link=='/post/category'} and ${#authorization.expression('isAuthenticated()')}">
+                <li th:if="${menu.link !='/post/category'} and ${userRole} == 'ROLE_ADMIN'">
                     <a th:href="@{/shop/add}">
                         <span>아이템 추가</span>
                     </a>
                 </li>
-                <li th:unless="${menu.link=='/post/category'} and ${#authorization.expression('isAuthenticated()')}">
+                <li th:if="${menu.link !='/post/category'} and ${userRole} == 'ROLE_ADMIN'">
                     <a th:href="@{/shop/delete}">
                         <span>아이템 삭제</span>
                     </a>

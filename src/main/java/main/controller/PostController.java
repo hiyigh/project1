@@ -34,13 +34,13 @@ public class PostController {
     private final LayoutService layoutService;
     private final UserMethod userMethod;
     @GetMapping("/write" )
-    public String writePost(Model model){
-        layoutService.addLayout(model);
+    public String writePost(Model model, Authentication authentication){
+        layoutService.addLayout(model, authentication);
         return "/post/postWrite";
     }
     @PostMapping("/write")
     public String writePost(@RequestBody PostDto postDto , Model model, Authentication authentication) {
-        layoutService.addLayout(model);
+        layoutService.addLayout(model,authentication);
         User user = new User();
         if(authentication!=null) {
             Object principal = authentication.getPrincipal();
@@ -60,19 +60,18 @@ public class PostController {
             }
         }
         postMethod.add(postDto);
-
         return "redirect:/post/postWrite";
     }
     @GetMapping("/edit")
-    public String editPost(@PathVariable Long postId, Model model) {
+    public String editPost(@PathVariable Long postId, Model model, Authentication authentication) {
         Post post = postMethod.getPostById(postId);
-        layoutService.addLayout(model);
+        layoutService.addLayout(model,authentication);
         model.addAttribute("post",post);
         return "/post/postEdit";
     }
     @PostMapping("/edit")
-    public String editPost(@RequestBody PostDto postDto, Model model){
-        layoutService.addLayout(model);
+    public String editPost(@RequestBody PostDto postDto, Model model, Authentication authentication){
+        layoutService.addLayout(model, authentication);
         postMethod.update(postDto);
 
         return "redirect:/post/view?" + postDto.getPostId();
@@ -87,8 +86,8 @@ public class PostController {
         return "/post/postView";
     }
     @GetMapping("/category/{categoryId}")
-    public String getPostList(Model model , @PathVariable Long categoryId) {
-        layoutService.addLayout(model);
+    public String getPostList(Model model , @PathVariable Long categoryId, Authentication authentication) {
+        layoutService.addLayout(model, authentication);
         List<Post> postList = postMethod.getPostByCategory(categoryId);
         Pagination page = Pagination.paging(1,postList.size());
 

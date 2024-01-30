@@ -46,8 +46,8 @@ public class MainController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/")
-    public String home(Model model) {
-        layoutService.addLayout(model);
+    public String home(Model model, Authentication authentication) {
+        layoutService.addLayout(model, authentication);
         List<String> imgUrlList;
         int fileCount = getFileCount("classpath:static/img/");
         imgUrlList = getImageUrlList(fileCount);
@@ -82,16 +82,16 @@ public class MainController {
     }
 
     @GetMapping("/aboutMe")
-    public String aboutMe(Model model) {
-        layoutService.addLayout(model);
+    public String aboutMe(Model model, Authentication authentication) {
+        layoutService.addLayout(model, authentication);
         List<Menu> menus = getMenu(EMenu.ME);
         model.addAttribute("menus", menus);
         return "/aboutMe";
     }
     @GetMapping("/board")
-    public String board(Model model) {
+    public String board(Model model, Authentication authentication) {
         List<Menu> menus = getMenu(EMenu.BOARD);
-        layoutService.addLayout(model);
+        layoutService.addLayout(model, authentication);
         List<Post> postList = postService.getAllPosts();
 
         if (postList == null) {
@@ -107,29 +107,17 @@ public class MainController {
     }
     @GetMapping("/shop")
     public String shop(Model model, Authentication authentication) {
+        layoutService.addLayout(model, authentication);
         List<Menu> menus = getMenu(EMenu.SHOP);
         List<Item> items =  shoppingService.getItemsByDesc();
-        String userRole = null;
-
-        if (authentication != null) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof UserDetails || principal instanceof OAuth2User) {
-                PrincipalDetails userDetails = (PrincipalDetails) principal;
-                userRole = userDetails.getAuthorities().toString();
-            }
-        }
-        for (int i = 0; i< items.size(); ++i) {
-            System.out.println("url :" + items.get(i).getImgUrl());
-        }
-
-        model.addAttribute("userRole", userRole);
+        String userRole = "default";
         model.addAttribute("items", items);
         model.addAttribute("menus", menus);
         return "/shop/shopList";
     }
     @PostMapping("/search")
-    public String searchKeyword(@RequestParam String keyword, @RequestParam String type, Model model) {
-        layoutService.addLayout(model);
+    public String searchKeyword(@RequestParam String keyword, @RequestParam String type, Model model, Authentication authentication) {
+        layoutService.addLayout(model, authentication);
         if (type.equals("post")) {
             List<Post> postList = postService.getPostByKeywordOrNull(keyword);
             if (postList == null) {

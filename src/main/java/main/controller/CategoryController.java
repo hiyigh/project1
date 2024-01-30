@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import main.model.Category;
 import main.service.LayoutService;
 import main.service.method.CategoryMethod;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,8 @@ public class CategoryController {
     private final CategoryMethod categoryMethod;
     private final LayoutService layoutService;
     @GetMapping("edit")
-    public String categoryEdit(Model model) {
-        layoutService.addLayout(model);
+    public String categoryEdit(Model model, Authentication authentication) {
+        layoutService.addLayout(model, authentication);
         List<Category> categoryList= categoryMethod.getAllCategoryList();
         model.addAttribute("categoryList", categoryList);
         return "/category/categoryEdit";

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{layout/layout.html::head}"></div>
+    <style>
+        .item-info{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh
+        }
+        .total-price{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh
+        }
+    </style>
+</head>
+<header th:replace="~{layout/layout.html::head}"></header>
+<body>
+<div class="item-info">
+    <ul>
+        <li th:each="item : ${items}">
+            <div class="item-basket">
+                <div class="item-img">
+                    <img th:src="${item.imgUrl}" class="img">
+                </div>
+                <br>
+                <div class="item-itemName">
+                    <span th:text="${item.itemName}" class="itemName"></span>
+                </div>
+                <br>
+                <div class="item-price">
+                    <span th:text="${item.price}" class="price"></span>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="total-price">
+    <span th:text="${totalPrice}" class="totalPrice"></span>
+</div>
+<div>
+    <button type="button" class="btn" >결제하기</button>
+</div>
+</body>
+</html>
