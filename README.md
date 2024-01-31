@@ -1,7 +1,8 @@
 # 목표
-- 제대로 코드를 작성할 수 있는지 확인하기 위해서 (dependency,ajax, mvc model,oauth2,aws,db)
+- 다른 기능들을 추가해보기 위해서 + 복습 (dependency,ajax, mvc model,oauth2,aws,db)
 # 기간
-- 1/17 ~ 
+- 1/17 ~
+- 1/31 결제api 
 # 환경설정
 - java 11 : 안정적
 - spirng web : spring mvc framework 사용
