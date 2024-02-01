@@ -1,7 +1,9 @@
 # 목표
-- 제대로 코드를 작성할 수 있는지 확인하기 위해서 (dependency,ajax, mvc model,oauth2,aws,db)
+- 다른 기능들을 추가해보기 위해서 + 복습 (dependency,ajax, mvc model,oauth2,aws,db)
 # 기간
-- 1/17 ~ 
+- 1/17 ~
+- ~1/31 결제api ~
+- 2/1 chat 
 # 환경설정
 - java 11 : 안정적
 - spirng web : spring mvc framework 사용
@@ -34,9 +36,9 @@
 - 댓글
   
 - 게시물
-- 쇼핑
+- 쇼핑 -> 일단 결제까지 
   - 결제
-  - 장바구니 - 회원 기록
+  - 장바구니
     
 - 문의하기
 
