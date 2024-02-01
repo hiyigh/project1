@@ -11,8 +11,8 @@ public class Pagination {
 
     private int listStartNum;
     private int listEndNum;
-    private final int displayPageBoxCnt = 5;
-    private final int displayPostPerPage = 5;
+    private final int displayPageBoxCnt = 6;
+    private final int displayPostPerPage = 6;
     public static Pagination paging(int currentPage, int totalPosts) {
         Pagination page = new Pagination();
         page.curPageNum = currentPage;

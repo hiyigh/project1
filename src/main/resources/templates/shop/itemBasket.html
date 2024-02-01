@@ -12,19 +12,26 @@
         .total-price{
             display: flex;
             justify-content: center;
-            align-items: center;
+            text-align:center;
+            margin-top: 10px;
             height: 100vh
+        }
+        .buy-button {
+            display:flex;
+            justify-content:center;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
-<header th:replace="~{layout/layout.html::head}"></header>
+<header th:replace="~{layout/layout.html::header}"></header>
 <body>
 <div class="item-info">
     <ul>
         <li th:each="item : ${items}">
             <div class="item-basket">
                 <div class="item-img">
-                    <img th:src="${item.imgUrl}" class="img">
+                    <img th:src="'/' + ${item.imgUrl}" class="img">
                 </div>
                 <br>
                 <div class="item-itemName">
@@ -39,10 +46,15 @@
     </ul>
 </div>
 <div class="total-price">
-    <span th:text="${totalPrice}" class="totalPrice"></span>
+    <span th:text="${totalPrice}" class="totalPrice">총액: </span>
 </div>
-<div>
-    <button type="button" class="btn" >결제하기</button>
+<div class="buy-button">
+    <button type="button" class="btn" id="buyButton">결제하기</button>
 </div>
+<script>
+    $('#buyButton').click(function(){
+        window.location.href='/shop/payment';
+    });
+</script>
 </body>
 </html>

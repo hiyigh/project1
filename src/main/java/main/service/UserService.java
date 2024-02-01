@@ -46,8 +46,8 @@ public class UserService implements UserMethod {
     }
 
     @Override
-    public List<Integer> getCommentHistory(Long userId) {
-        return userRepoMethod.getCommentHistory(userId);
+    public void setUserHistory(Long userId, Integer newData, HistoryType type) {
+        userRepoMethod.setUserHistory(userId, newData, type);
     }
 
     @Override
@@ -56,17 +56,19 @@ public class UserService implements UserMethod {
     }
 
     @Override
-    public List<Integer> getBasket(Long userId) {
-        return userRepoMethod.getBasket(userId);
+    public List<Integer> getCommentHistory(Long userId) {
+        return userRepoMethod.getCommentHistory(userId);
     }
 
     @Override
-    public void updateUserHistory(Integer userId, Integer newData, HistoryType type) {
-        userRepoMethod.updateUserHistory(userId, newData, type);
+    public List<Integer> getBasket(Long userId) {
+        return userRepoMethod.getBasket(userId);
     }
 
     @Override
     public Long getLastUserId() {
         return userRepoMethod.getLastUserId();
     }
+
+
 }

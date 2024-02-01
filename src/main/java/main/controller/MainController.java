@@ -84,13 +84,13 @@ public class MainController {
     @GetMapping("/aboutMe")
     public String aboutMe(Model model, Authentication authentication) {
         layoutService.addLayout(model, authentication);
-        List<Menu> menus = getMenu(EMenu.ME);
+        List<Menu> menus = layoutService.getMenu(EMenu.ME);
         model.addAttribute("menus", menus);
         return "/aboutMe";
     }
     @GetMapping("/board")
     public String board(Model model, Authentication authentication) {
-        List<Menu> menus = getMenu(EMenu.BOARD);
+        List<Menu> menus = layoutService.getMenu(EMenu.BOARD);
         layoutService.addLayout(model, authentication);
         List<Post> postList = postService.getAllPosts();
 
@@ -108,9 +108,13 @@ public class MainController {
     @GetMapping("/shop")
     public String shop(Model model, Authentication authentication) {
         layoutService.addLayout(model, authentication);
-        List<Menu> menus = getMenu(EMenu.SHOP);
+        List<Menu> menus = layoutService.getMenu(EMenu.SHOP);
+
         List<Item> items =  shoppingService.getItemsByDesc();
+        Pagination page = Pagination.paging(1, items.size());
+
         String userRole = "default";
+        model.addAttribute("page", page);
         model.addAttribute("items", items);
         model.addAttribute("menus", menus);
         return "/shop/shopList";
@@ -148,70 +152,6 @@ public class MainController {
             e.printStackTrace();
         }
         return 0;
-    }
-
-    private List<Menu> getMenu(EMenu menuType) {
-        List<Menu> menus = new ArrayList<>();
-        switch (menuType) {
-            case BOARD:
-                setCategoryMenu(menus);
-                for (int i = 0; i<menus.size();++i) {
-                    setSubCategoryMenu(menus);
-                }
-                break;
-            case SHOP:
-                setShopMenu(menus);
-                break;
-            case ME:
-                setAboutMe(menus);
-                break;
-
-        }
-        return menus;
-    }
-
-    private void setAboutMe(List<Menu> menus) {
-        Menu menu1 = new Menu();
-        menu1.setLink("/aboutMe/profile");
-        menu1.setText("프로필");
-        menus.add(menu1);
-    }
-
-    private void setShopMenu(List<Menu> menus) {
-        Menu menu1 = new Menu();
-        Menu menu2 = new Menu();
-        menu1.setLink("/shop/basket");
-        menu1.setText("장바구니");
-        menu2.setLink("/shop/pay");
-        menu2.setText("결제");
-        menus.add(menu1);
-        menus.add(menu2);
-    }
-
-    private void setCategoryMenu(List<Menu> menus) {
-        List<Category> categoryList = categoryService.getRootCategoryList();
-
-        int length = categoryList.size();
-        for (int i =0; i< length; ++i) {
-            Menu menu = new Menu();
-            menu.setLink("/post/category");
-            menu.setId(categoryList.get(i).getCategoryId());
-            menu.setText(categoryList.get(i).getCategoryTitle());
-            menus.add(menu);
-        }
-    }
-
-    private void setSubCategoryMenu(List<Menu> menus) {
-        for (int i =0; i<menus.size(); ++i) {
-            List<Category> categoryList = categoryService.getSubCategoryList(menus.get(i).getId());
-            for (int j = 0; j < categoryList.size(); ++j) {
-                Menu subMenu = new Menu();
-                subMenu.setLink("/post/category");
-                subMenu.setId(categoryList.get(j).getCategoryId());
-                subMenu.setText(categoryList.get(i).getCategoryTitle());
-                menus.get(i).getSubMenu().add(subMenu);
-            }
-        }
     }
 
 }

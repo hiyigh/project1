@@ -1,9 +1,11 @@
 package main.controller;
 
+import com.sun.jdi.LongValue;
 import lombok.RequiredArgsConstructor;
 import main.dto.PostDto;
 import main.dto.PrincipalDetails;
 import main.model.*;
+import main.model.enumeration.HistoryType;
 import main.service.CategoryService;
 import main.service.CommentService;
 import main.service.LayoutService;
@@ -52,8 +54,7 @@ public class PostController {
                 if(user != null) {
                     Long postId = postMethod.getLastPostIdOrNull() + 1l;
 
-                    user.setPostHistory(new ArrayList<>());
-                    user.getPostHistory().add(postId);
+                    userMethod.setUserHistory(user.getUserId(), postId.intValue(), HistoryType.POST);
                     postDto.setPostId(postId);
                     postDto.setUserId(user.getUserId());
                 }

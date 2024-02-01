@@ -13,14 +13,16 @@ public interface UserRepoMethod {
     User getUserByEmailOrNull(String userEmail);
 
     List<User> getAllUsers();
-    List<Integer> getCommentHistory(Long userId);
+    void setUserHistory(Long userId, Integer newData, HistoryType type);
     List<Integer> getPostHistory(Long userId);
+    List<Integer> getCommentHistory(Long userId);
     List<Integer> getBasket(Long userId);
-    void updateUserHistory(Integer userId, Integer newData, HistoryType type);
 
     void add(User user);
 
     User find(Long userId);
 
     Long getLastUserId();
+
+
 }

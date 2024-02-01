@@ -20,9 +20,9 @@ public class User extends Time {
     private boolean userSex;
     private Role role;
 
-    private List<Long> basket = new ArrayList<>();
-    private List<Long> commentHistory = new ArrayList<>();
-    private List<Long> postHistory = new ArrayList<>();
+    private String basket;
+    private String commentHistory;
+    private String postHistory;
 
     private String provider;
     private String providerId;

@@ -2,6 +2,7 @@ package main.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import main.model.enumeration.EMenu;
 
 import java.util.List;
 

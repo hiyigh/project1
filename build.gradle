@@ -20,8 +20,9 @@ configurations {
 
 repositories {
 	mavenCentral()
-	maven {url 'https://jitpack.io'}
+	maven { url 'https://jitpack.io' }
 }
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -30,6 +31,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.springframework.boot:spring-boot-starter-json'
+
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.2'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -37,6 +43,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
+
 }
 
 tasks.named('test') {

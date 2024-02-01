@@ -4,22 +4,39 @@
     <div th:replace="~{layout/layout.html::head}"></div>
     <title>Item Detail</title>
     <style>
-        body{
-            display:flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin:0;
+
+        .item-explanation {
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-        .item-explanation{
-            text-align:center;
+
+        .item-url {
+            margin-bottom: 20px;
         }
-        .item-url,
-        .item-title,
+
+        .image {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .item-name,
         .item-detail,
         .item-price,
         .item-hits {
             margin-bottom: 20px;
+        }
+        .item-buy,
+        .item-basket {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            margin: 20px;
+        }
+        .item-basket {
+            right: 60px;
         }
     </style>
 </head>
@@ -28,7 +45,7 @@
 <section th:replace="~{layout/sidebar.html::sidebar}"></section>
     <div class="item-explanation">
         <div class="item-url">
-            <img th:src="${item.imgUrl}" class="item-img">
+            <img th:src="'/' + ${item.imgUrl}" class="image">
         </div>
         <div class="item-name">
             <span class="itemName" th:text="${item.itemName}"></span>
@@ -44,42 +61,35 @@
         </div>
     </div>
     <div class="item-buy">
-        <button th:unless="${item.inventoryCount == 0}" type="button" class="btn" data-item-id="${item.itemId}">buy</button>
+        <button th:if="${item.inventoryCount != 0} and ${userRole} != 'default'" type="button" class="btn"
+                th:data-item-id="${item.itemId}">buy</button>
     </div>
     <div class="item-basket">
-        <button type="button" class="btn" data-item-id="${item.itemId}">basket</button>
+        <form action="/shop/addBasket" method="post">
+            <button type="submit" class="btn" th:if="${userRole != 'default'}">basket</button>
+            <input type="hidden" name="itemId" th:value="${item.itemId}" />
+        </form>
     </div>
     <script>
         $(document).ready(function(){
             $('.item-buy button').click(function(){
                 var itemId = $(this).data('item-id');
                 $.ajax({
-                    type: 'GET',
-                    url: '/shop/buy',
+                    type: 'POST',
+                    url: '/shop/addBasket',
                     data: {itemId: itemId},
                     success: function(response) {
                         alert('구매창으로 이동');
+                        payment();
                     },
                     error: function(error) {
                         alert('구매 실패');
                     }
                 });
             });
-
-            $('.item-basket button').click(function(){
-                var itemId = $(this).data('item-id');
-                $.ajax({
-                    type: 'GET',
-                    url: '/shop/basket',
-                    data: {itemId: itemId},
-                    success: function(response) {
-                        alert('장바구니로 이동');
-                    },
-                    error: function(error) {
-                        alert('등록 실패');
-                    }
-                });
-            });
+            function payment(){
+                window.location.href='/shop/payment';
+            }
         });
     </script>
 </body>

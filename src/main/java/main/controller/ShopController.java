@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import main.dto.ItemDto;
 import main.dto.PrincipalDetails;
 import main.model.Item;
+import main.model.Menu;
 import main.model.User;
+import main.model.enumeration.EMenu;
+import main.model.enumeration.HistoryType;
 import main.service.LayoutService;
 import main.service.method.ShoppingMethod;
 import main.service.method.UserMethod;
@@ -35,14 +38,18 @@ public class ShopController {
         layoutService.addLayout(model, authentication);
         List<Item> items = shoppingMethod.getRecentItems();
         model.addAttribute("items", items);
+        System.out.println("after addbasket");
         return "/shop/shopList";
     }
 
-    @GetMapping("/item")
-    public String goToItem(@RequestParam int itemId, Model model,Authentication authentication) {
+    @GetMapping("/item/{itemId}")
+    public String goToItem(@PathVariable int itemId, Model model, Authentication authentication) {
         Item item = shoppingMethod.getItem(itemId);
         layoutService.addLayout(model, authentication);
+        List<Menu> menus = layoutService.getMenu(EMenu.SHOP);
         model.addAttribute("item", item);
+        model.addAttribute("menus", menus);
+
         return "/shop/itemDetail";
     }
     @GetMapping("/order")
@@ -95,18 +102,27 @@ public class ShopController {
         itemDto.setDetail(detail);
         itemDto.setInventoryCount(Integer.parseInt(inventoryCont));
         shoppingMethod.addItem(itemDto);
-        return "redirect:/shop/shopList";
+        return "redirect:/shop";
     }
     @GetMapping("/delete")
     public String deleteItem(@RequestParam int itemId) {
         shoppingMethod.deleteItem(itemId);
         return"redirect:/shop/shopList";
     }
+    @PostMapping("/addBasket")
+    public String addBasket(@RequestParam int itemId, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userMethod.getUserByEmailOrNull(principalDetails.getUsername());
+        if (user.getBasket() == null) {
+            user.setBasket("");
+        }
+        userMethod.setUserHistory(user.getUserId(),itemId, HistoryType.BASKET);
+        return "redirect:/shop";
+    }
     @GetMapping("/basket")
     public String goToBasket(Model model, Authentication authentication) {
         layoutService.addLayout(model, authentication);
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        User user = userMethod.getUserByEmailOrNull(principal.getUsername());
+        User user = layoutService.getUser();
 
         String itemList;
         List<Item> items = new ArrayList<>();
@@ -115,23 +131,39 @@ public class ShopController {
         if (user.getBasket() == null) {
             itemList = "empty";
         } else {
-            itemList = user.getBasket().toString();
+            itemList = user.getBasket();
         }
 
         if (itemList.equals("empty")) {
             items = new ArrayList<>();
         } else {
-            String[] itemArray = itemList.substring(1, itemList.length()-1).split(",");
-            List<Integer> itemListAsInteger = Arrays.stream(itemArray).map(Integer::parseInt).collect(Collectors.toList());
-
-            for (int i = 0; i < itemListAsInteger.size(); ++i) {
-                Item item = shoppingMethod.getItem(itemListAsInteger.get(i));
+            List<Integer> itemId = userMethod.getBasket(user.getUserId());
+            for (int i = 0; i < itemId.size(); ++i) {
+                Item item = shoppingMethod.getItem(itemId.get(i));
                 totalPrice += item.getPrice();
                 items.add(item);
             }
         }
+
         model.addAttribute("items", items);
         model.addAttribute("totalPrice", totalPrice);
         return "/shop/itemBasket";
+    }
+    @GetMapping("/payment")
+    public String payment(Model model, Authentication authentication) {
+        layoutService.addLayout(model, authentication);
+        List<Integer> basketList = userMethod.getBasket(layoutService.getUser().getUserId());
+        int totalPrice = 0;
+        List<Item> items = new ArrayList<>();
+        for (int i = 0; i < basketList.size(); ++i) {
+            Item item = shoppingMethod.getItem(basketList.get(i));
+            items.add(item);
+            totalPrice += item.getPrice();
+        }
+
+        model.addAttribute("items", items);
+        model.addAttribute("totalPrice", totalPrice);
+
+        return "/shop/itemBuy";
     }
 }
