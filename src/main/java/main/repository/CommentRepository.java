@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import main.dto.CommentDto;
 import main.model.Comment;
 import main.repository.method.CommentRepoMethod;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,13 +17,14 @@ public class CommentRepository implements CommentRepoMethod {
     private final JdbcTemplate jdbcTemplate;
     @Override
     public void add(CommentDto commentDto) {
-        jdbcTemplate.update("insert into Comments (postId, userId, commentId, mainCommentId, commentContent, isSecret, createdTime)",
+        jdbcTemplate.update("insert into Comments (postId, userId, commentWriter, mainCommentId, commentContent, isSecret)" +
+                        "values(?,?,?,?,?,?)",
                 commentDto.getPostId(),
                 commentDto.getUserId(),
+                commentDto.getCommentWriter(),
                 commentDto.getMainCommentId(),
                 commentDto.getCommentContent(),
-                commentDto.isSecret(),
-                commentDto.getCreatedTime()
+                commentDto.isSecret()
         );
     }
 
@@ -56,7 +58,11 @@ public class CommentRepository implements CommentRepoMethod {
 
     @Override
     public Long getLastCommentNum() {
-        return jdbcTemplate.queryForObject("select commentId from Comments order by commentId desc limit 1",Long.class);
+        try {
+            return jdbcTemplate.queryForObject("select commentId from Comments order by commentId desc limit 1",Long.class);
+        } catch(EmptyResultDataAccessException e) {
+            return 0l;
+        }
     }
 
     @Override

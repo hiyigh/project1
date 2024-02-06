@@ -1,5 +1,7 @@
 package main.configure;
 
+import lombok.RequiredArgsConstructor;
+import main.controller.handler.CustomHandshakeInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,16 +14,16 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 
 import java.util.logging.SocketHandler;
 
+
 @Configuration
 @EnableWebSocket
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
-    @Autowired
-    private SocketHandler socketHandler;
-
+    private final WebSocketHandler webSocketHandler;
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler((WebSocketHandler) socketHandler, "/wss/chat")
-                .addInterceptors(new HttpSessionHandshakeInterceptor(), new C)
+        registry.addHandler(webSocketHandler, "/wss/chat")
+                .setAllowedOrigins("http://localhost:8080");
     }
     @Bean
     public ServletServerContainerFactoryBean createWebSocketContainer() {

@@ -1,53 +1,84 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/layout.html::head}"><title>Post Edit</title></head>
+<head><title>Post Edit</title>
+    <div th:replace="~{layout/layout.html::head}"></div>
+    <style>
+    .edit-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 400px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    .editPostForm label,
+    .editPostForm input,
+    .editPostForm textarea,
+    .editPostForm button {
+        margin-bottom: 10px;
+    }
+    </style>
+</head>
+<header th:replace="~{layout/layout.html::header}"></header>
 <body>
-    <section th:replace="~{layout/sidebar.html::section}"></section>
-        <div>
-            <ul>
-                 <li th:each="category : ${categoryList}">
-                    <a href="#" th:text="category.getCategoryTitle()" onclick="setCategoryId(category.getCategoryId())"></a>
-                </li>
-            </ul>
+        <div class="edit-form">
+            <div>
+                <select id="categoryTitle" class="form-select ps-3">
+                    <option selected="카테고리 옵션"></option>
+                    <option th:each="categoryOption : ${categoryList}" th:data-category-id="${categoryOption.categoryId}" th:text="${categoryOption.categoryTitle}"></option>
+                </select>
+            </div>
 
             <form id="editPostForm">
                 <input type="hidden" id="newCategoryId" value="">
-                <input type="hidden" id="postId" th:value="${post.getId()}" />
+                <input type="hidden" id="postId" th:value="${post.postId}" />
 
                 <label for="newTitle">Title:</label>
-                <input type="text" id="newTitle" th:value="${post.getTitle()}" /><br />
+                <input type="text" id="newTitle" th:value="${post.postTitle}" /><br />
 
                 <label for="newContent">Content:</label>
-                <textarea id="newContent" th:text="${post.getContent()}"></textarea><br />
+                <textarea id="newContent" th:text="${post.postContent}"></textarea><br />
 
                 <button type="button" onclick="editPost()">수정</button>
             </form>
         </div>
 
         <script>
-        function setCategoryId(categoryId) {
-            $('#newCategoryId').val(categoryId);
-        }
+        var categoryId;
+        $('#categoryTitle').change(function(){
+            categoryId = $(this).find(::selected).data('category-id');
+        });
+
         function editPost() {
-            var postId = document.getElementById('postId').value;
-            var newTitle = document.getElementById('newTitle').value;
-            var newContent = document.getElementById('newContent').value;
-            var newCategoryId = document.getElementById('newCategoryId').value;
+            var postId = $('#postId').val();
+            var newTitle = $('#newTitle').val();
+            var newContent = $('#newContent').val();
 
             var postData = {
-                id: postId,
-                title: newTitle,
-                content: newContent,
-                categoryId: newCategoryId
+                postId: postId,
+                postTitle: newTitle,
+                postContent: newContent,
+                categoryId: categoryId
             };
 
-            fetch("/post/edit",{method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(postData)})
-                .then(response=>response.json())
-                .then(data=>{console.log("서버 응답",data);})
-                .catch(error=>{console.log("수정 에러", error);});
+            $.ajax({
+                url: "/post/edit",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(postData),
+                success: function (data) {
+                    console.log("서버 응답", data);
+                    window.location.href='/post/view/' + postId;
+                },
+                error: function (error) {
+                    console.log("수정 에러", error);
+                }
+            });
         }
     </script>
-    <script th:src="js/sidebar.js"></script>
-    <script th:src="js/search.js"></script>
+    <script th:src="@{/js/sidebar.js}"></script>
+    <script th:src="@{/js/search.js}"></script>
 </body>
 </html>

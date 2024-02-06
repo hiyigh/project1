@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{layout/layout.html::head}"></div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Chat</title>
+</head>
+<header th:replace="~{layout/layout.html::header}"></header>
+<body>
+    <form action="/chat/createRoom" method="post">
+        <button type="submit" >문의하기</button>
+    </form>
+</body>
+</html>

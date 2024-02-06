@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/shop")
-public class ShopController {
+public class    ShopController {
     private final ShoppingMethod shoppingMethod;
     private final LayoutService layoutService;
     private final UserMethod userMethod;

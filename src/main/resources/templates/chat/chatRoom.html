@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{layout/layout::head}"></div>
+    <title>chat room</title>
+</head>
+<header th:replace="~{layout/layout::header}"></header>
+<body>
+
+    <input type="text" placeholder="보낼 메세지를 입력하세요." class="content">
+    <button type="button" value="전송" class="sendBtn" onclick="sendMsg()">전송</button>
+    <button type="button" value="방나가기" class="quit" onclick="quit()">방 나가기 </button>
+
+    <div>
+        <span>메세지</span>
+        <div class="msgArea">
+        </div>
+    </div>
+
+</body>
+
+<script th:inline="javascript">
+        var roomNumber = [[${roomInfo.chatRoom.roomNumber}]];
+        var userEmail =  [[${user.userEmail}]];
+
+        function enterRoom(socket){
+            var enterMsg = {
+                "messageType" : "ENTER",
+                "roomNumber" : roomNumber,
+                "userEmail" : userEmail,
+                "message" : ""
+            };
+            socket.send(JSON.stringify(enterMsg));
+        }
+        let socket = new WebSocket("ws://localhost:8080/wss/chat");
+
+        socket.onopen = function (e) {
+            console.log('open server!')
+            enterRoom(socket);
+        };
+        socket.onclose=function(e){
+            console.log('disconnet');
+        }
+
+        socket.onerror = function (e){
+            console.log(e);
+        }
+
+        //메세지 수신했을 때 이벤트.
+        socket.onmessage = function (e) {
+            console.log(e.data);
+            let msgArea = document.querySelector('.msgArea');
+            let newMsg = document.createElement('div');
+            newMsg.innerText = e.data;
+            msgArea.append(newMsg);
+        }
+
+        function sendMsg() {
+            var content = $('.content').val();
+
+            var talkMsg = {
+                "messageType" : "TALK",
+                "roomNumber" :  roomNumber,
+                "userEmail" : userEmail,
+                "message" : content
+            };
+
+            socket.send(JSON.stringify(talkMsg));
+        }
+
+        function quit(){
+             var quitMsg={
+                "messageType" : "QUIT",
+                "roomNumber" : [[${roomInfo.chatRoom.roomNumber}]] ,
+                "userEmail" : [[${user.userEmail}]],
+                "message" :""
+             };
+            socket.send(JSON.stringify(quitMsg));
+            socket.close();
+            window.location.href="/chat";
+        }
+</script>
+
+</html>

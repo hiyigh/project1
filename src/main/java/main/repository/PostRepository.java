@@ -15,8 +15,8 @@ public class PostRepository implements PostRepoMethod {
     private final JdbcTemplate jdbcTemplate;
     @Override
     public void add(Post post) {
-        String sql = "insert into Posts(postTitle, postContent, categoryId, createdTime) values (?,?,?,?)";
-        jdbcTemplate.update(sql, post.getPostTitle(),  post.getPostContent(), post.getCategoryId(), post.getCreatedTime());
+        String sql = "insert into Posts(userId,postTitle, postContent, categoryId, createdTime) values (?,?,?,?,?)";
+        jdbcTemplate.update(sql, post.getUserId(),post.getPostTitle(),  post.getPostContent(), post.getCategoryId(), post.getCreatedTime());
     }
     @Override
     public void delete(Long postId) {
@@ -34,8 +34,12 @@ public class PostRepository implements PostRepoMethod {
 
     @Override
     public Post getPostById(Long postId) {
-        return jdbcTemplate.queryForObject("select * from Posts where postId = ?", new Object[]{postId},
-                new BeanPropertyRowMapper<>(Post.class));
+        try {
+            return jdbcTemplate.queryForObject("select * from Posts where postId = ?", new Object[]{postId},
+                    new BeanPropertyRowMapper<>(Post.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override

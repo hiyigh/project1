@@ -39,3 +39,4 @@ out/
 application-mariadb.properties
 application-oauth2.properties
 application-payment.properties
+application-s3.properties

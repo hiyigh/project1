@@ -14,6 +14,7 @@ import main.service.method.CategoryMethod;
 import main.service.method.UserMethod;
 import main.service.paging.Pagination;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -44,7 +45,7 @@ public class PostController {
     public String writePost(@RequestBody PostDto postDto , Model model, Authentication authentication) {
         layoutService.addLayout(model,authentication);
         User user = new User();
-        if(authentication!=null) {
+        if(authentication != null) {
             Object principal = authentication.getPrincipal();
             if (principal instanceof UserDetails || principal instanceof OAuth2User) {
                 PrincipalDetails userDetails = (PrincipalDetails) principal;
@@ -61,27 +62,45 @@ public class PostController {
             }
         }
         postMethod.add(postDto);
-        return "redirect:/post/postWrite";
+        return "redirect:/post/write";
     }
     @GetMapping("/edit")
-    public String editPost(@PathVariable Long postId, Model model, Authentication authentication) {
+    public String editPost(@RequestParam Long postId, Model model, Authentication authentication) {
+
         Post post = postMethod.getPostById(postId);
-        layoutService.addLayout(model,authentication);
-        model.addAttribute("post",post);
+        layoutService.addLayout(model, authentication);
+        model.addAttribute("post", post);
         return "/post/postEdit";
     }
     @PostMapping("/edit")
     public String editPost(@RequestBody PostDto postDto, Model model, Authentication authentication){
         layoutService.addLayout(model, authentication);
-        postMethod.update(postDto);
 
-        return "redirect:/post/view?" + postDto.getPostId();
+        postMethod.update(postDto);
+        return "redirect:/post/view/" + postDto.getPostId();
+    }
+    @GetMapping("/delete")
+    public String deletePost(@RequestParam Long postId) {
+        postMethod.delete(postId);
+        return "redirect:/board";
     }
     @GetMapping("/view/{postId}")
-    public String viewPost(@PathVariable Long postId, Model model) {
+    public String viewPost(@PathVariable Long postId, Model model, Authentication authentication) {
         Post post = postMethod.getPostById(postId);
-        List<Comment> commentList = commentMethod.getCommentByPostId(postId);
+        User postUser = userMethod.getUserById(post.getUserId());
+        User loginUser = null;
+        if (authentication != null && authentication.isAuthenticated()) {
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+            loginUser = userMethod.getUserByEmailOrNull(principalDetails.getUsername());
+        }
 
+        List<Comment> commentList = commentMethod.getCommentByPostId(postId);
+        if (commentList == null) {
+            commentList = new ArrayList<>();
+        }
+
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("postUser", postUser);
         model.addAttribute( "post",post);
         model.addAttribute("commentList", commentList);
         return "/post/postView";

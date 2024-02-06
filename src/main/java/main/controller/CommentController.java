@@ -20,26 +20,29 @@ public class CommentController {
     private final UserService userMethod;
     private final CommentMethod commentMethod;
     @PostMapping("/addComment")
-    public void addComment(@RequestParam Long postId, Long userId, String commentContent) {
-        User user = userMethod.getUserById(userId);
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Long index = commentMethod.getLastCommentNum();
+    @ResponseBody
+    public List<Comment> addComment(@RequestParam Long postId, @RequestParam Long commentUserId, String commentContent) {
         CommentDto commentDto = new CommentDto();
+        User user = userMethod.getUserById(commentUserId);
 
-        commentDto.setCommentId(index + 1);
+        commentDto.setCommentWriter(user.getUserName());
         commentDto.setPostId(postId);
-        commentDto.setUserId(userId);
-        commentDto.setMainCommentId(-1L);
+        commentDto.setUserId(commentUserId);
+        commentDto.setMainCommentId(null);
         commentDto.setCommentContent(commentContent);
-        commentDto.setCreatedTime(localDateTime);
         commentMethod.add(commentDto);
+
+        List<Comment> updateCommentList = commentMethod.getCommentByPostId(postId);
+        return updateCommentList;
     }
     @PostMapping("/updateList")
+    @ResponseBody
     public List<Comment> updateCommentList(@RequestParam Long postId) {
         List<Comment> updateCommentList = commentMethod.getCommentByPostId(postId);
         return updateCommentList;
     }
     @GetMapping("/addReComment")
+    @ResponseBody
     public List<Comment> reCommentList(@RequestParam Long parentId) {
         List<Comment> reCommentList = commentMethod.getCommentByParentId(parentId);
         return reCommentList;

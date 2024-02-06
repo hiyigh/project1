@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/layout.html :: head}">
     <title>Write Post</title>
@@ -39,7 +39,6 @@
         var categoryId;
         $('#categoryTitle').change(function(){
             categoryId = $(this).find(':selected').data('category-id');
-console.log("Category ID:", $(this).find(':selected').data('category-id'));
         });
 
         function writePost() {
@@ -47,14 +46,10 @@ console.log("Category ID:", $(this).find(':selected').data('category-id'));
             var title = $('#title').val();
             var content = $('#content').val();
 
-console.log("user ID:", $('#userId').data('user-id'));
-console.log("categoryId:", categoryId);
-console.log("userId:", userId);
             $.ajax({
                 type:'POST',
                 url:'/post/write',
                 data: JSON.stringify({
-                    userId: userId,
                     postTitle: title,
                     postContent: content,
                     categoryId: categoryId

@@ -32,7 +32,7 @@ public class LayoutService {
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
             user = userMethod.getUserByEmailOrNull(principalDetails.getUsername());
             int roleLen = user.getRole().toString().length();
-            userRole = user.getRole().toString().substring(1, roleLen - 1);
+            userRole = user.getRole().toString();
         }
         model.addAttribute("user", user);
         model.addAttribute("categoryList",categoryList);
