@@ -23,6 +23,9 @@ repositories {
 	maven { url 'https://jitpack.io' }
 }
 
+ext {
+	kotlin_version = '1.9.20-RC2'
+}
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -41,13 +44,25 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'com.zaxxer:HikariCP:4.0.3'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
 
+	testImplementation 'junit:junit:4.13.1'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	// Kotlin 관련 테스트 의존성
+	testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+	testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+	testImplementation group: 'org.mockito.kotlin', name: 'mockito-kotlin', version: '4.0.0'
+
+	// JUnit 5 관련 테스트 의존성
+	testImplementation(platform("org.junit:junit-bom:5.9.1"))
+	testImplementation("org.junit.jupiter:junit-jupiter")
+
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()
