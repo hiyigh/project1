@@ -30,7 +30,6 @@ ext {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.security:spring-security-crypto:5.6.1'
 
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -67,10 +66,4 @@ dependencies {
 
 tasks.test {
 	useJUnitPlatform()
-}
-
-jar {
-	manifest {
-		attributes 'Main-Class': 'main.Project1Application'
-	}
 }

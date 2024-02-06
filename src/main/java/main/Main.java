@@ -16,12 +16,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 				ContextRegionProviderAutoConfiguration.class
 		}
 )
-public class Project1Application {
+public class Main {
 	@Bean
 	public BCryptPasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
 	}
 	public static void main(String[] args) {
-		SpringApplication.run(Project1Application.class, args);
+		SpringApplication.run(Main.class, args);
 	}
 }
