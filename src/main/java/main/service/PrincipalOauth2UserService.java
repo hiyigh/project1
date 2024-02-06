@@ -1,5 +1,6 @@
 package main.service;
 
+import lombok.RequiredArgsConstructor;
 import main.dto.PrincipalDetails;
 import main.model.User;
 import main.model.enumeration.Role;
@@ -15,28 +16,25 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
-        String provider = userRequest.getClientRegistration().getRegistrationId();
-        String providerId = oAuth2User.getAttribute("sub");
-        String userName = provider + "-" + providerId;
-
-        String uuid = UUID.randomUUID().toString().substring(0,6);
-        String password = bCryptPasswordEncoder.encode("password" + uuid);
-
         String email = oAuth2User.getAttribute("email");
-        Role role = Role.ROLE_USER;
-
         User user = userRepository.getUserByEmailOrNull(email);
 
         if (user == null) {
+            String provider = userRequest.getClientRegistration().getRegistrationId();
+            String providerId = oAuth2User.getAttribute("sub");
+            String userName = provider + "-" + providerId;
+
+            String uuid = UUID.randomUUID().toString().substring(0,6);
+            String password = "password" + uuid;
+
+            Role role = Role.ROLE_USER;
             user = new User(userName, email, password, role, provider, providerId);
         }
         return new PrincipalDetails(user, oAuth2User.getAttributes());

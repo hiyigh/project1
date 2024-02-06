@@ -17,10 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 		}
 )
 public class Main {
-	@Bean
-	public BCryptPasswordEncoder encoder() {
-		return new BCryptPasswordEncoder();
-	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(Main.class, args);
 	}
