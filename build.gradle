@@ -1,14 +1,8 @@
+/*
 plugins {
-/*	id 'java'
-	id 'org.springframework.boot' version '2.6.1'
-	id 'io.spring.dependency-management' version '1.1.4'*/
-	id 'org.springframework.boot' version '2.5.6'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-
-	id "org.jetbrains.kotlin.jvm" version "1.9.20-RC2"
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
-	id "com.github.node-gradle.node" version "3.1.0"
 	id 'java'
+	id 'org.springframework.boot' version '2.6.1'
+	id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'project1'
@@ -36,7 +30,7 @@ ext {
 }
 
 dependencies {
-/*	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -67,11 +61,47 @@ dependencies {
 
 	// JUnit 5 관련 테스트 의존성
 	testImplementation(platform("org.junit:junit-bom:5.9.1"))
-	testImplementation("org.junit.jupiter:junit-jupiter")*/
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-	implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
+	testImplementation("org.junit.jupiter:junit-jupiter")
+}
 
+tasks.test {
+	useJUnitPlatform()
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'main.Main'
+	}
+}*/
+plugins {
+	id 'org.springframework.boot' version '2.5.6'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+
+	id "org.jetbrains.kotlin.jvm" version "1.9.20-RC2"
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id "com.github.node-gradle.node" version "3.1.0"
+	id 'java'
+}
+
+jar {
+	enabled = false
+}
+
+group = 'blogProject3'
+version = '0.0.1-SNAPSHOT-'+ new Date().format("yyyyMMddHHmmss")
+sourceCompatibility = '11'
+
+repositories { // 라이브러리 저장소
+	mavenCentral() // maven 형식을 사용한다.
+	gradlePluginPortal() // gradle 플러그인 검색할 수 있는 공식 저장소
+}
+
+ext {
+	kotlin_version = '1.9.20-RC2'
+}
+
+dependencies {
+	// 웹 개발 및 뷰 랜더링 dependency
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	// database and ORM
@@ -134,15 +164,49 @@ dependencies {
 
 	testImplementation(platform("org.junit:junit-bom:5.9.1"))
 	testImplementation("org.junit.jupiter:junit-jupiter")
-
 }
 
 tasks.test {
 	useJUnitPlatform()
 }
 
-jar {
-	manifest {
-		attributes 'Main-Class': 'main.Main'
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+
+compileTestKotlin {
+	kotlinOptions {
+		jvmTarget = "1.8"
 	}
 }
+
+
+// NPM 설정
+
+node {
+	version = '17.0.0'
+	download = true
+	nodeModulesDir = file("${projectDir}/src/main/resources/static")
+}
+
+task copyFrontLib(type: Copy) {
+	from "${projectDir}/src/main/resources/static"
+	into "${projectDir}/build/resources/main/static/."
+}
+copyFrontLib.dependsOn npmInstall
+processResources.dependsOn npmInstall
+compileJava.dependsOn copyFrontLib
+
