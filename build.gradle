@@ -66,3 +66,9 @@ dependencies {
 tasks.test {
 	useJUnitPlatform()
 }
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'src/main/java/main/Project1Application.java'
+	}
+}
