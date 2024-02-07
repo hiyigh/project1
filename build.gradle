@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.6.1'
-	id 'io.spring.dependency-management' version '1.1.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 group = 'project1'
@@ -20,7 +20,6 @@ configurations {
 
 repositories {
 	mavenCentral()
-	gradlePluginPortal() // gradle 플러그인 검색할 수 있는 공식 저장소
 	maven { url 'https://jitpack.io' }
 }
 
@@ -47,7 +46,7 @@ dependencies {
 	implementation 'com.zaxxer:HikariCP:4.0.3'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.3.0'
 	implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
