@@ -1,36 +1,26 @@
 package main.controller;
 
 import lombok.RequiredArgsConstructor;
-import main.dto.PrincipalDetails;
 import main.model.*;
 import main.model.enumeration.EMenu;
 import main.model.enumeration.Role;
-import main.service.CategoryService;
 import main.service.LayoutService;
 import main.service.PostService;
 import main.service.ShoppingService;
 import main.service.method.UserMethod;
 import main.service.paging.Pagination;
-import net.minidev.json.JSONUtil;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.PrincipalMethodArgumentResolver;
-
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,8 +30,10 @@ public class MainController {
     private final ShoppingService shoppingService;
     private final PostService postService;
     private final UserMethod userMethod;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @GetMapping("/")
     public String home(Model model, Authentication authentication) {
@@ -68,7 +60,7 @@ public class MainController {
             model.addAttribute("error", "Email is already in use");
             return "redirect:/enroll";
         }
-        String bcryptPassword = bCryptPasswordEncoder.encode(password);
+        String bcryptPassword = bCryptPasswordEncoder().encode(password);
         User user = new User(name, email, bcryptPassword, gender, Role.ROLE_USER);
         userMethod.add(user);
         return "redirect:/";
