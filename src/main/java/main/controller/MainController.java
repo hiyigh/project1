@@ -19,12 +19,11 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.PrincipalMethodArgumentResolver;
 
 import javax.servlet.http.HttpSession;
@@ -39,11 +38,10 @@ public class MainController {
 
     private final LayoutService layoutService;
     private final ShoppingService shoppingService;
-    private final ResourceLoader resourceLoader;
-    private final CategoryService categoryService;
     private final PostService postService;
     private final UserMethod userMethod;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @GetMapping("/")
     public String home(Model model, Authentication authentication) {
@@ -88,17 +86,22 @@ public class MainController {
         model.addAttribute("menus", menus);
         return "/aboutMe";
     }
-    @GetMapping("/board")
-    public String board(Model model, Authentication authentication) {
+    @GetMapping("/board/{curPage}")
+    public String board(@PathVariable int curPage, Model model, Authentication authentication) {
         List<Menu> menus = layoutService.getMenu(EMenu.BOARD);
         layoutService.addLayout(model, authentication);
-        List<Post> postList = postService.getAllPosts();
+        List<Post> totalList = postService.getAllPosts();
 
-        if (postList == null) {
-            postList = new ArrayList<>();
+        if (totalList == null) {
+            totalList = new ArrayList<>();
             return "post/postList";
         }
-        Pagination page = Pagination.paging(1,postList.size());
+        Pagination page = Pagination.paging(curPage, totalList.size());
+
+        List<Post> postList = new ArrayList<>();
+        for (int i = page.getListStartNum() ; i < page.getListEndNum(); ++i) {
+            postList.add(totalList.get(i - 1));
+        }
         model.addAttribute("admitWritePost", "postList");
         model.addAttribute("page", page);
         model.addAttribute("postList", postList);
@@ -119,20 +122,13 @@ public class MainController {
         model.addAttribute("menus", menus);
         return "/shop/shopList";
     }
-    @PostMapping("/search")
+    @GetMapping("/search")
     public String searchKeyword(@RequestParam String keyword, @RequestParam String type, Model model, Authentication authentication) {
         layoutService.addLayout(model, authentication);
         if (type.equals("post")) {
-            List<Post> postList = postService.getPostByKeywordOrNull(keyword);
-            if (postList == null) {
-
-            }
-            model.addAttribute("postList", postList);
-            return "redirect:/post/postList";
+            return "redirect:/post/list?keyword=" + keyword;
         } else {
-             List<Item> items = shoppingService.getItemsByKeywordOrNull(keyword);
-             model.addAttribute(items);
-             return "redirect:/shop/shopList";
+             return "redirect:/shop/list?keyword=" + keyword + "&curPage=" + 1;
         }
     }
     private List<String> getImageUrlList(int fileCount) {

@@ -5,36 +5,34 @@ import lombok.Getter;
 @Getter
 public class Pagination {
 
-    private int startPageNum = 1;
+    private int startPageNum;
     private int curPageNum;
-    private int lastPageNum;
+    private int endPageNum;
 
     private int listStartNum;
     private int listEndNum;
-    private final int displayPageBoxCnt = 6;
-    private final int displayPostPerPage = 6;
+
+    private int totalPageCnt;
+    private static final int displayCnt = 10;
     public static Pagination paging(int currentPage, int totalPosts) {
         Pagination page = new Pagination();
+
         page.curPageNum = currentPage;
-        page.lastPageNum = (int) (Math.ceil(totalPosts / (double) page.displayPostPerPage));
+        page.startPageNum = ((currentPage - 1) / 5 + 1);
+        page.endPageNum = ((currentPage - 1) / 5 + 1) * 5;
 
-        if(page.curPageNum > page.lastPageNum){
-            page.curPageNum = page.lastPageNum;
+        page.totalPageCnt = totalPosts / displayCnt;
+        if ((totalPosts % 10) != 0){
+            page.totalPageCnt++;
+        }
+        if (page.endPageNum > page.totalPageCnt) {
+            page.endPageNum = page.totalPageCnt;
         }
 
-        if(page.curPageNum <= 0){
-            page.curPageNum = 1;
-        }
+        page.listStartNum = ((currentPage - 1) * displayCnt) + 1;
+        page.listEndNum = currentPage * displayCnt;
 
-        if(page.curPageNum % page.displayPageBoxCnt == 0) {
-            page.listStartNum = ((page.curPageNum / page.displayPageBoxCnt)-1) * page.displayPageBoxCnt + 1;
-        }else {
-            page.listStartNum = (page.curPageNum - 1 ) * page.displayPageBoxCnt + 1;
-        }
-
-        page.listEndNum = (page.curPageNum * page.displayPageBoxCnt);
-
-        if(page.listEndNum > totalPosts) {
+        if (page.listEndNum > totalPosts) {
             page.listEndNum = totalPosts;
         }
 

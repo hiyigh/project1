@@ -1,20 +1,35 @@
+@media(max-width:800px){
+    .item-filter{
+        float:right;
+        display:none;
+    }
+    .grid-conta iner{
+        display: grid;
+        grid-template-columns: repeat(auto-fill,minmax(300px,auto));
+        padding:50px;
+        margin:50px;
+    }
+}
+.grid-border{
+    margin-top:40px;
+}
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 30px;
     list-style: none;
-    padding: 0;
+    padding: 10px;
 }
 
 .grid-item {
     text-align: center;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     padding: 20px;
 }
 .item-filter {
-    grid-area: filter;
-    grid-row: 1;
+    float:right;
+    margin-bottom:10px;
 }
 .image {
     width: 100%;
@@ -24,5 +39,6 @@
 
 .item-text,
 .item-price {
+    text-align: center;
     margin-top: 30px;
 }

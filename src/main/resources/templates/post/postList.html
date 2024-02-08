@@ -45,13 +45,13 @@
     <nav aria-label="Page navigation">
         <ul class="pagination">
             <li th:if="${page.curPageNum > 1}" class="page-item">
-                <a data-page="${page.curPageNum - 1}" class="page-link">Previous</a>
+                <a th:data-page="${page.curPageNum - 1}" class="page-link">Previous</a>
             </li>
-            <li th:each="curPage : ${#numbers.sequence(1, page.lastPageNum)}" th:class="${curPage == page.curPageNum} ? 'page-item active' : 'page-item'">
-                <a data-page="${page.curPageNum}" class="page-link" th:text="${page.curPageNum}"></a>
+            <li th:each="curPage : ${#numbers.sequence(page.startPageNum, page.endPageNum)}" th:class="${curPage == page.curPageNum} ? 'page-item active' : 'page-item'">
+                <a th:data-page="${curPage}" class="page-link" th:text="${curPage}"></a>
             </li>
-            <li th:if="${page.curPageNum < page.lastPageNum}" class="page-item">
-                <a data-page="${page.curPageNum + 1}" class="page-link">Next</a>
+            <li th:if="${page.curPageNum < page.endPageNum}" class="page-item">
+                <a th:data-page="${page.curPageNum + 1}" class="page-link">Next</a>
             </li>
         </ul>
     </nav>
@@ -66,31 +66,8 @@
             $('.pagination .page-link').click(function (event) {
                 event.preventDefault();
 
-                var currentPage = parseInt($(this).data('page'));
-                var categoryId = $('.post-list').data('category-id');
-                $.ajax({
-                    type: 'GET',
-                    url: '/post/list',
-                    data: {
-                        categoryId : categoryId,
-                        currentPage : currentPage
-                    },
-                    success: function (postListData) {
-                        var newPostListHtml = '';
-                        for (var i = 0; i < postListData.length; i++) {
-                            newPostListHtml += '<li>';
-                            newPostListHtml += '<div>';
-                            newPostListHtml += '<a href="/post/view?postId=' + postListData[i].postId + '">' +
-                                '<span>' + postListData[i].postTitle + '</span></a>';
-                            newPostListHtml += '</div>';
-                            newPostListHtml += '</li>';
-                        }
-                        $('.post-list').html(response);
-                    },
-                    error: function (error) {
-                        console.error('Error request:', error);
-                    }
-                });
+                var currentPage = $(this).data('page');
+                window.location.href='/board/' + currentPage;
             });
         });
     </script>

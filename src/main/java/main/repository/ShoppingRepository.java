@@ -64,7 +64,7 @@ public class ShoppingRepository implements ShoppingRepoMethod {
 
     @Override
     public List<Item> getItemsByKeywordOrNull(String keyword) {
-        return jdbcTemplate.query("select * from Items where itemName like ? or itemDetail like ?",
+        return jdbcTemplate.query("select * from Items where itemName like ? or detail like ?",
                 new Object[]{"%"+ keyword +"%", "%"+ keyword +"%"}, new BeanPropertyRowMapper<>(Item.class));
     }
 

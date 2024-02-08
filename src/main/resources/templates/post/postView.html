@@ -9,9 +9,6 @@
         .mb-2 {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
         }
 
         .mb-2 ul {
@@ -91,7 +88,7 @@
             <input type="hidden" class="commentId" th:data-userId="${comment.userId}">
             <input type="hidden" class="commentWriter" th:data-commentWriter="${comment.commentWriter}">
 
-            <b id="'commentWriter_' + ${comment.commentId}" th:text="${comment.commentWriter}"></b>
+            <b id="'commentWriter_' + ${comment.commentId}" th:text="${comment.commentWriter}" style="float:left"></b>
             <span style='float:right;' align='right' id="'commentDate_' + ${comment.commentId}"
                   th:text="${comment.createdTime}"></span>
 
@@ -219,6 +216,7 @@
                         html += "</div>";
                     }
                     $("#comment-list").html(html);
+                    location.reload();
         }
         function displayTime(timestamp) {
             const date = new Date(timestamp);

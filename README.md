@@ -1,9 +1,10 @@
 # 목표
-- 다른 기능들을 추가해보기 위해서 + 복습 (dependency,ajax, mvc model,oauth2,aws,db)
+- 다른 기능들을 추가 (dependency,ajax, mvc model,oauth2,aws,db)
 # 기간
 - 1/17 ~
 - ~1/31 결제api ~
-- 2/1 chat 
+- ~2/1 chat~
+- 2/3 동작 확인
 # 환경설정
 - java 11 : 안정적
 - spirng web : spring mvc framework 사용
@@ -58,3 +59,5 @@
 
 - jdbcTemplate queryForObject 에서 값이 없을 경우 -> EmptyResultDataAccessException
 - thymeleaf ${} 는 문자열로 랜더링 
+- putty ec2 에서 오류가 나는데 뭐가 문제인지 알 수가 없음
+  - 의존성 호환 문제?

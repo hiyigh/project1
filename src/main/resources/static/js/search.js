@@ -1,23 +1,13 @@
-var searchId;
+var type;
+
 function handleSearchChange(selectedValue){
-    searchId = selectedValue;
+    type = selectedValue;
 }
 
 $('#searchForm').submit(function (event) {
         event.preventDefault();
 
         var keyword = $('#searchInput').val();
-        searchId = $('#search-dropdown').val();
-
-        $.ajax({
-            type:'POST',
-            url:'/search',
-            contentType:'application/json',
-            data:JSON.stringify ({
-                keyword:keyword,
-                searchId : searchId
-                }),
-            success:function(response){console.log('success',response);},
-            error:function(error){console.log('error',error);}
-        });
+        type = $('#search-dropdown').val();
+        window.location.href='/search?keyword=' + keyword + '&type=' + type;
 });

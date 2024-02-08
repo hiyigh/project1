@@ -8,7 +8,6 @@
 <header th:replace="~{layout/layout.html::header}"></header>
 <body>
     <section th:replace="~{layout/sidebar.html::sidebar}"></section>
-    <main class="container">
         <div class="item-filter">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
             <ul class="dropdown-menu">
@@ -20,7 +19,7 @@
             </ul>
         </div>
 
-        <div>
+        <div class="grid-border">
             <ul class="grid-container">
                 <li th:each="item : ${items}" class="images grid-item">
                     <a th:href="'/shop/item/' + ${item.itemId}" class="item-link" style="cursor:pointer" >
@@ -35,8 +34,30 @@
                 </li>
             </ul>
         </div>
-    </main>
-<script>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li th:if="${page.curPageNum} > 1" class="page-item">
+                <a th:data-page="${page.curPageNum - 1}" class="page-link">previous</a>
+            </li>
+            <li th:each="curPage : ${#numbers.sequence(page.startPageNum, page.endPageNum)}"
+                th:class="${curPage == page.curPageNum} ? 'page-item active' : 'page-item' ">
+                <a th:data-page="${curPage}" class="page-link" th:text="${curPage}"></a>
+            </li>
+            <li th:if="${page.curPageNum < page.endPageNum}" class="page-item">
+                <a th:data-page="${page.curPageNum + 1}" class="page-link">next</a>
+            </li>
+        </ul>
+    </nav>
+    <script>
+
+    $(document).ready(function(){
+        $('.pagination .page-link').click(function(event){
+            event.preventDefault();
+            var curPage = $(this).data('page');
+            window.location.href='/shop/list'
+        });
+    });
+
     $('.dropdown-item').click(function(){
         var orderId = $(this).data('item-id');
 

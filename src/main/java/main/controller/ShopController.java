@@ -11,6 +11,7 @@ import main.model.enumeration.HistoryType;
 import main.service.LayoutService;
 import main.service.method.ShoppingMethod;
 import main.service.method.UserMethod;
+import main.service.paging.Pagination;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,12 +34,15 @@ public class    ShopController {
     private final ShoppingMethod shoppingMethod;
     private final LayoutService layoutService;
     private final UserMethod userMethod;
-    @GetMapping("/shopList")
-    public String shopList(Model model, Authentication authentication) {
+    @GetMapping("/shopList/{curPage}")
+    public String shopList(@PathVariable int curPage,Model model, Authentication authentication) {
         layoutService.addLayout(model, authentication);
         List<Item> items = shoppingMethod.getRecentItems();
+        Pagination page = Pagination.paging(curPage, items.size());
+
+        model.addAttribute("page", page);
         model.addAttribute("items", items);
-        System.out.println("after addbasket");
+
         return "/shop/shopList";
     }
 
@@ -49,6 +53,8 @@ public class    ShopController {
         List<Menu> menus = layoutService.getMenu(EMenu.SHOP);
         model.addAttribute("item", item);
         model.addAttribute("menus", menus);
+
+        System.out.println("itemdetail: " + model.getAttribute("userRole"));
 
         return "/shop/itemDetail";
     }
@@ -86,7 +92,7 @@ public class    ShopController {
                           @RequestPart("inventoryCont") String inventoryCont,
                           @RequestPart("detail") String detail) throws IOException {
         String uploadDirectory = "src/main/resources/static/img/";
-        String srcUrl = "img/";
+        String srcUrl = "/img/";
 
         String url = imgUrl.getOriginalFilename();
         Path imgPath = Path.of(uploadDirectory, url);
@@ -165,5 +171,14 @@ public class    ShopController {
         model.addAttribute("totalPrice", totalPrice);
 
         return "/shop/itemBuy";
+    }
+    @GetMapping("/list")
+    public String searchList(@RequestParam int curPage, @RequestParam String keyword, Model model, Authentication authentication){
+        layoutService.addLayout(model, authentication);
+        List<Item> items = shoppingMethod.getItemsByKeywordOrNull(keyword);
+        Pagination page = Pagination.paging(curPage, items.size());
+        model.addAttribute("page", page);
+        model.addAttribute("items", items);
+        return "/shop/shopList";
     }
 }

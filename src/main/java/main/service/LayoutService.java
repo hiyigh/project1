@@ -77,7 +77,7 @@ public class LayoutService {
         int length = categoryList.size();
         for (int i =0; i< length; ++i) {
             Menu menu = new Menu();
-            menu.setLink("/post/category");
+            menu.setLink("/post/category/");
             menu.setId(categoryList.get(i).getCategoryId());
             menu.setText(categoryList.get(i).getCategoryTitle());
             menus.add(menu);
@@ -89,7 +89,7 @@ public class LayoutService {
             List<Category> categoryList = categoryMethod.getSubCategoryList(menus.get(i).getId());
             for (int j = 0; j < categoryList.size(); ++j) {
                 Menu subMenu = new Menu();
-                subMenu.setLink("/post/category");
+                subMenu.setLink("/post/category/");
                 subMenu.setId(categoryList.get(j).getCategoryId());
                 subMenu.setText(categoryList.get(i).getCategoryTitle());
                 menus.get(i).getSubMenu().add(subMenu);

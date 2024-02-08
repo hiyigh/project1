@@ -13,6 +13,7 @@ import main.service.PostService;
 import main.service.method.CategoryMethod;
 import main.service.method.UserMethod;
 import main.service.paging.Pagination;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.parameters.P;
@@ -108,23 +109,29 @@ public class PostController {
     @GetMapping("/category/{categoryId}")
     public String getPostList(Model model , @PathVariable Long categoryId, Authentication authentication) {
         layoutService.addLayout(model, authentication);
-        List<Post> postList = postMethod.getPostByCategory(categoryId);
-        Pagination page = Pagination.paging(1,postList.size());
+        List<Post> totalList = postMethod.getPostByCategory(categoryId);
+        Pagination page = Pagination.paging(1,totalList.size());
 
+        List<Post> postList = new ArrayList<>();
+        for (int i = page.getListStartNum(); i < page.getListEndNum(); ++i) {
+            postList.add(totalList.get(i - 1));
+        }
         model.addAttribute("page", page);
         model.addAttribute("postList", postList);
         return "/post/postList";
     }
-    @GetMapping("/paging")
-    @ResponseBody
-    public List<Post> getPaging(@RequestParam Long categoryId, @RequestParam int currentPage) {
-        List<Post> postList = postMethod.getPostByCategory(categoryId);
-        Pagination page = Pagination.paging(currentPage, postList.size());
+    @GetMapping("/list")
+    public String searchPosts(@RequestParam String keyword, Model model, Authentication authentication) {
+        layoutService.addLayout(model, authentication);
+        List<Post> totalList = postMethod.getPostByKeywordOrNull(keyword);
+        Pagination page = Pagination.paging(1, totalList.size());
         List<Post> pagingList = new ArrayList<>();
-        for (int i = page.getListStartNum(); i < page.getListEndNum(); ++i) {
-            pagingList.add(postList.get(i));
-        }
-        return pagingList;
-    }
 
+        for (int i = page.getListStartNum(); i < page.getListEndNum(); ++i) {
+            pagingList.add(totalList.get(i - 1));
+        }
+        model.addAttribute("page", page);
+        model.addAttribute("postList", pagingList);
+        return "/post/postList";
+    }
 }

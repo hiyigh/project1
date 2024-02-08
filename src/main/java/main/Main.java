@@ -9,6 +9,7 @@ import org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfi
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+
 @SpringBootApplication(
 		exclude = {
 				SecurityAutoConfiguration.class,
@@ -18,6 +19,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 		}
 )
 public class Main {
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 	public static void main(String[] args) {
 		SpringApplication.run(Main.class, args);
 	}

@@ -38,13 +38,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         if (chatMessage.getMessageType().equals(ChatMessage.MessageType.ENTER)) {
             chatMessage.setMessage(chatMessage.getUserEmail() + "님이 입장했습니다.");
-            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(chatMessage)));
+            session.sendMessage(new TextMessage(chatMessage.getMessage()));
         }
         else if (chatMessage.getMessageType().equals(ChatMessage.MessageType.QUIT)) {
             chatMessage.setMessage(chatMessage.getUserEmail() + "님이 퇴장했습니다..");
-            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(chatMessage)));
+            session.sendMessage(new TextMessage(chatMessage.getMessage()));
         }else {
-            session.sendMessage(message);
+            session.sendMessage(new TextMessage(chatMessage.getMessage()));
         }
     }
 }

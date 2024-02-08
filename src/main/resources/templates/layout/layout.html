@@ -17,9 +17,6 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-
-    </style>
 </head>
 <header th:fragment="header">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -44,7 +41,7 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" th:href="@{'/chat'}">문의하기</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" th:href="@{'/board'}">게시판</a></li>
+                            <li><a class="dropdown-item" th:href="@{'/board/1'}">게시판</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" th:href="@{'/shop'}">쇼핑</a></li>
                         </ul>
@@ -61,17 +58,16 @@
 
                 <form id="searchForm" class="d-flex">
                     <div class="dropdown-search">
-                        <input id="searchInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <input type="search" id="searchInput" class="form-control me-2" placeholder="Search" aria-label="Search">
                     </div>
+                    <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
 
-                <button class="btn btn-outline-success" type="submit">Search</button>
                 <button th:unless="${#authorization.expression('isAuthenticated()')}"
                         type="button" class="btn btn-outline-success" id="loginButton" data-bs-toggle="modal"
                         data-bs-target="#loginModal">Login</button>
                 <a th:if="${#authorization.expression('isAuthenticated()')}" class="btn" id="logoutButton"
                    href="/logout" >Logout</a>
-
 
                 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -83,6 +79,20 @@
             </div>
         </div>
     </nav>
+<script>
+    var isAuthenticated = [[${#authorization.expression('isAuthenticated()')}]];
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var chatLink = document.querySelector(".dropdown-item[href='/chat']");
+        chatLink.addEventListener("click", function(event) {
+            if (!isAuthenticated) {
+                event.preventDefault();
+                alert("로그인 후에 이용할 수 있습니다!");
+            }
+        });
+    });
+</script>
+<script src="/js/search.js"></script>
 </header>
 </html>
 

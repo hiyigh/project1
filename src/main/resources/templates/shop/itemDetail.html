@@ -4,7 +4,6 @@
     <div th:replace="~{layout/layout.html::head}"></div>
     <title>Item Detail</title>
     <style>
-
         .item-explanation {
             text-align: center;
             position: absolute;
@@ -18,7 +17,7 @@
         }
 
         .image {
-            max-width: 100%;
+            width: 100%;
             height: auto;
         }
 
@@ -30,10 +29,12 @@
         }
         .item-buy,
         .item-basket {
-            position: fixed;
-            bottom: 0;
-            right: 0;
+            position: flex;
+            float:right;
             margin: 20px;
+        }
+        .btn{
+            float:right;
         }
         .item-basket {
             right: 60px;
@@ -64,12 +65,10 @@
         <button th:if="${item.inventoryCount != 0} and ${userRole} != 'default'" type="button" class="btn"
                 th:data-item-id="${item.itemId}">buy</button>
     </div>
-    <div class="item-basket">
         <form action="/shop/addBasket" method="post">
             <button type="submit" class="btn" th:if="${userRole != 'default'}">basket</button>
             <input type="hidden" name="itemId" th:value="${item.itemId}" />
         </form>
-    </div>
     <script>
         $(document).ready(function(){
             $('.item-buy button').click(function(){

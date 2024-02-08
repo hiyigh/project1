@@ -3,20 +3,27 @@
 <head>
     <div th:replace="~{layout/layout::head}"></div>
     <title>chat room</title>
+    <style>
+        .box{
+            display:flex;
+            justify-content:center;
+            text-align:center;
+        }
+    </style>
 </head>
 <header th:replace="~{layout/layout::header}"></header>
 <body>
-
-    <input type="text" placeholder="보낼 메세지를 입력하세요." class="content">
-    <button type="button" value="전송" class="sendBtn" onclick="sendMsg()">전송</button>
-    <button type="button" value="방나가기" class="quit" onclick="quit()">방 나가기 </button>
-
-    <div>
-        <span>메세지</span>
-        <div class="msgArea">
+    <div class="box">
+        <input type="text" placeholder="보낼 메세지를 입력하세요." class="content">
+        <button type="button" value="전송" class="sendBtn" onclick="sendMsg()">전송</button>
+        <button type="button" value="방나가기" class="quit" onclick="quit()">방 나가기 </button>
+        <br>
+        <div>
+            <span>메세지</span>
+            <div class="msgArea">
+            </div>
         </div>
     </div>
-
 </body>
 
 <script th:inline="javascript">
@@ -64,8 +71,8 @@
                 "userEmail" : userEmail,
                 "message" : content
             };
-
             socket.send(JSON.stringify(talkMsg));
+            $('.content').val('');
         }
 
         function quit(){
