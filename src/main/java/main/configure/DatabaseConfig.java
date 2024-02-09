@@ -13,9 +13,6 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DatabaseConfig {
-    @Value("${spring.datasource.url}")
-    private String jdbcUrl;
-
     @Value("${spring.datasource.username}")
     private String username;
 
