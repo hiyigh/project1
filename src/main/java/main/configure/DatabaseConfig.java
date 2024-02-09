@@ -2,8 +2,9 @@ package main.configure;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,33 +13,31 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DatabaseConfig {
-    @Value( "${spring.database.url}")
+    @Value( "${spring.datasource.url}")
     private String jdbcUrl;
 
-    @Value("${spring.database.username}")
+    @Value("${spring.datasource.username}")
     private String username;
 
-    @Value("${spring.database.password}")
+    @Value("${spring.datasource.password}")
     private String password;
 
-    @Value("${spring.database.driver-class-name}")
+    @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
 
-    @Value("${spring.database.connection-timeout}")
+    @Value("${spring.datasource.connection-timeout}")
     private int connectionTimeout;
 
-    @Value("${spring.database.maximum-pool-size}")
+    @Value("${spring.datasource.maximum-pool-size}")
     private int maximumPoolSize;
     @Bean
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl(jdbcUrl);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-        dataSource.setDriverClassName(driverClassName);
-        dataSource.setConnectionTimeout(connectionTimeout);
-        dataSource.setMaximumPoolSize(maximumPoolSize);
-        return dataSource;
+        return DataSourceBuilder.create().url(jdbcUrl)
+                .username(username)
+                .password(password)
+                .driverClassName(driverClassName)
+                .build();
     }
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
