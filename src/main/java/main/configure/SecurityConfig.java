@@ -20,7 +20,7 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf(c->c.disable())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/css/**", "/js/**", "/img/**", "/layout/layout", "/layout/sidebar", "/post/postView",
-                        "/post/postList", "/shop/itemDetail", "/shop/shopList", "/aboutMe", "/home", "/login", "/enroll").permitAll()
+                        "/post/postList", "/shop/itemDetail", "/shop/shopList", "/aboutMe", "/home", "/login", "/enroll", "/").permitAll()
                         .requestMatchers("/post/postEdit", "/post/postWrite", "/shop/itemBasket", "/shop/itemBuy").hasRole("USER")
                         .requestMatchers("/category/categoryEdit").hasRole("ADMIN"))
                 .formLogin(login -> login.loginPage("/login")
@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .failureUrl("/login")
                         .userInfoEndpoint(userInfoEndpointConfig ->
                                 userInfoEndpointConfig.userService(principalOauth2UserService)))
-                .logout(logout->logout.logoutUrl("/logout")
+                .logout(logout -> logout.logoutUrl("/logout")
                         .deleteCookies("remember-me")
                         .logoutSuccessUrl("/"));
         return http.build();
