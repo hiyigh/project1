@@ -19,10 +19,11 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf(c->c.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/css/**", "/js/**", "/img/**", "/layout/layout", "/layout/sidebar", "/post/postView",
-                        "/post/postList", "/shop/itemDetail", "/shop/shopList", "/aboutMe", "/home", "/login", "/enroll", "/").permitAll()
-                        .requestMatchers("/post/postEdit", "/post/postWrite", "/shop/itemBasket", "/shop/itemBuy").hasRole("USER")
-                        .requestMatchers("/category/categoryEdit").hasRole("ADMIN"))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/post/postEdit", "/post/postWrite", "/shop/itemBasket", "/shop/itemBuy","/chat/chat",
+                                "/chat/chatRoom").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/category/categoryEdit").hasRole("ADMIN")
+                        .anyRequest().permitAll())
                 .formLogin(login -> login.loginPage("/login")
                         .loginProcessingUrl("/login")
                         .usernameParameter("userEmail")
