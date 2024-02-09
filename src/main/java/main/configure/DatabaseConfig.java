@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DatabaseConfig {
-    @Value( "${spring.datasource.url}")
+    @Value("${spring.datasource.url}")
     private String jdbcUrl;
 
     @Value("${spring.datasource.username}")
@@ -33,7 +33,7 @@ public class DatabaseConfig {
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
-        return DataSourceBuilder.create().url(jdbcUrl)
+        return DataSourceBuilder.create().url("jdbc:mariadb://project1-blog.caw1uaxlfzuq.ap-northeast-2.rds.amazonaws.com:3306/project1-blog")
                 .username(username)
                 .password(password)
                 .driverClassName(driverClassName)
