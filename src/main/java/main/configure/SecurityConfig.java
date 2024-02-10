@@ -18,12 +18,12 @@ public class SecurityConfig {
     private final PrincipalOauth2UserService principalOauth2UserService;
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.csrf(c->c.disable())
+        http.csrf(c -> c.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/post/postEdit", "/post/postWrite", "/shop/itemBasket", "/shop/itemBuy","/chat/chat",
                                 "/chat/chatRoom").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/category/categoryEdit").hasRole("ADMIN")
-                        .anyRequest().permitAll())
+                        .requestMatchers("/","/home","/shop/shopList", "/post/postList").permitAll())
                 .formLogin(login -> login.loginPage("/login")
                         .loginProcessingUrl("/login")
                         .usernameParameter("userEmail")
