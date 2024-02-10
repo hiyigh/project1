@@ -42,7 +42,7 @@ public class MainController {
         int fileCount = getFileCount("classpath:static/img/");
         imgUrlList = getImageUrlList(fileCount);
         model.addAttribute("images", imgUrlList);
-        
+
         return "/home";
     }
     @GetMapping("/login")
