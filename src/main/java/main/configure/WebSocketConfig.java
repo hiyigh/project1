@@ -18,7 +18,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(webSocketHandler, "/wss/chat")
-                .setAllowedOrigins("http://localhost:8080");
+                .setAllowedOrigins("http://localhost:8080", "http://ec2-3-35-143-36.ap-northeast-2.compute.amazonaws.com:8080");
     }
     @Bean
     public ServletServerContainerFactoryBean createWebSocketContainer() {
