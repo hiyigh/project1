@@ -23,7 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("/post/postEdit", "/post/postWrite", "/shop/itemBasket", "/shop/itemBuy","/chat/chat",
                                 "/chat/chatRoom").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/category/categoryEdit").hasRole("ADMIN")
-                        .requestMatchers("/","/home","/shop/shopList", "/post/postList").permitAll())
+                        .requestMatchers("/","/home","/shop/shopList", "/post/postList","/login","/enroll").permitAll())
                 .formLogin(login -> login.loginPage("/login")
                         .loginProcessingUrl("/login")
                         .usernameParameter("userEmail")
