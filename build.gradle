@@ -74,4 +74,3 @@ jar {
 		attributes 'Main-Class': 'main.Main'
 	}
 }
-
