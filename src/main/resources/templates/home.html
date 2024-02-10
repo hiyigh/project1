@@ -67,7 +67,7 @@
             <div class="post-wrapper">
                 <div th:each="imagePath : ${images}" class="post">
          <!-- /static ?-->
-                    <img th:src="'/static' + ${imagePath}" class="slider-image" alt="Slider Image">
+                    <img th:src="${imagePath}" class="slider-image" alt="Slider Image">
                 </div>
             </div>
         </div>
