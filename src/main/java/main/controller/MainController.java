@@ -42,7 +42,7 @@ public class MainController {
         int fileCount = getFileCount("classpath:static/img/");
         imgUrlList = getImageUrlList(fileCount);
         model.addAttribute("images", imgUrlList);
-        System.out.println("getmapping / try return /home");
+        System.out.println("getmapping try return /home");
         return "/home";
     }
     @GetMapping("/login")
