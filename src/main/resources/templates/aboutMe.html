@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="~{layout/layout.html :: head}"></div>
+    <div th:replace="~{/layout/layout.html :: head}"></div>
     <title>About Me</title>
     <style>
         .div {
@@ -9,10 +9,10 @@
         }
     </style>
 </head>
-<header th:replace="~{layout/layout.html::header}"></header>
+<header th:replace="~{/layout/layout.html::header}"></header>
 
 <body>
-    <section th:replace="~{layout/sidebar.html::sidebar}">
+    <section th:replace="~{/layout/sidebar.html::sidebar}">
     </section>
     <div class="div">
         <p>About me</p>

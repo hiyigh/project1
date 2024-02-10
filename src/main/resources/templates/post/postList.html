@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/layout.html::head}">
+<head th:replace="~{/layout/layout.html::head}">
     <title>postList</title>
 </head>
 <header>
-    <div th:replace="~{layout/layout.html::header}"></div>
+    <div th:replace="~{/layout/layout.html::header}"></div>
     <style>
         .post-list-box{
             max-width:600px;
@@ -25,7 +25,7 @@
 </header>
 
 <body>
-    <section th:replace="~{layout/sidebar.html::section}"></section>
+    <section th:replace="~{/layout/sidebar.html::section}"></section>
     <section>
 <div class="post-list-box">
     <div class="post-list">

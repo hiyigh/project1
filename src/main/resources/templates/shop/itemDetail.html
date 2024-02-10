@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="~{layout/layout.html::head}"></div>
+    <div th:replace="~{/layout/layout.html::head}"></div>
     <title>Item Detail</title>
     <style>
         .item-explanation {
@@ -41,9 +41,9 @@
         }
     </style>
 </head>
-<header th:replace="~{layout/layout.html::header}"></header>
+<header th:replace="~{/layout/layout.html::header}"></header>
 <body>
-<section th:replace="~{layout/sidebar.html::sidebar}"></section>
+<section th:replace="~{/layout/sidebar.html::sidebar}"></section>
     <div class="item-explanation">
         <div class="item-url">
             <img th:src="'/' + ${item.imgUrl}" class="image">

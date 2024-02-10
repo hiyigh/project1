@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="~{layout/layout::head}"></div>
+    <div th:replace="~{/layout/layout::head}"></div>
     <title>chat room</title>
     <style>
         .box{
@@ -11,7 +11,7 @@
         }
     </style>
 </head>
-<header th:replace="~{layout/layout::header}"></header>
+<header th:replace="~{/layout/layout::header}"></header>
 <body>
     <div class="box">
         <input type="text" placeholder="보낼 메세지를 입력하세요." class="content">

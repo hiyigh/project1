@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="~{layout/layout.html::head}"></div>
+    <div th:replace="~{/layout/layout.html::head}"></div>
     <style>
         .item-container{
             display:flex;
@@ -22,7 +22,7 @@
         }
     </style>
 </head>
-<header th:replace="~{layout/layout.html::header}"></header>
+<header th:replace="~{/layout/layout.html::header}"></header>
 <body>
     <section>
         <div class="item-container">

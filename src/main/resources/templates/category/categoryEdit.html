@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/layout.html::head}">
+<head th:replace="~{/layout/layout.html::head}">
     <title>Category Edit</title>
     <style>
         body {
@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-<section th:replace="~{layout/sidebar.html::section}"></section>
+<section th:replace="~{/layout/sidebar.html::section}"></section>
 <div id="category-list">
     <ul>
         <li th:each="category : ${categoryList}">
