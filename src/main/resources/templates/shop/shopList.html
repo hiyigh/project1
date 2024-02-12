@@ -20,8 +20,8 @@
         </div>
 
         <div class="grid-border">
-            <ul class="grid-container">
-                <li th:each="item : ${items}" class="images grid-item">
+            <ul class="grid-container" style="margin-left:100px; margin-right:100px;">
+                <li th:each="item : ${items}" class="images grid-item" style="width:249px; height:324px;">
                     <a th:href="'/shop/item/' + ${item.itemId}" class="item-link" style="cursor:pointer" >
                         <img th:src="${item.imgUrl}" class="image">
                     </a>

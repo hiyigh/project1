@@ -46,7 +46,7 @@
 <section th:replace="~{/layout/sidebar.html::sidebar}"></section>
     <div class="item-explanation">
         <div class="item-url">
-            <img th:src="'/' + ${item.imgUrl}" class="image">
+            <img th:src="${item.imgUrl}" class="image">
         </div>
         <div class="item-name">
             <span class="itemName" th:text="${item.itemName}"></span>
