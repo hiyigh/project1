@@ -45,6 +45,7 @@
 - 문의하기
 
 #
+- spring boot 기본 경로 설정 문제 -> spring thyemleaf prefix 
 - putty ec2 에서 오류가 나는데 뭐가 문제인지 알 수가 없음
 ->의존성 호환 문제?
 - ec2 에서 서버를 실행 시키려했는데 not def found erorr, class not found exception 에러 발생 -> 클래스를 찾지 못해서 발생하는 문제-> 이것저것 찾아보다 1. 의존성 충돌 2. jar 파일 문제 3. 라이브러리 충돌 문제
