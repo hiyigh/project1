@@ -33,9 +33,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
             String uuid = UUID.randomUUID().toString().substring(0,6);
             String password = "password" + uuid;
+            Role role = Role.ROLE_USER; // 사용자의 역할 설정
 
-            Role role = Role.ROLE_USER;
-            user = new User(userName, email, password, role, provider, providerId);
+            user = new User.Oauth2UserBuilder().userName(userName).userPassword(password).userEmail(email).role(role)
+                    .provider(provider).providerId(providerId).build();
+            userRepository.add(user);
         }
         return new PrincipalDetails(user, oAuth2User.getAttributes());
     }

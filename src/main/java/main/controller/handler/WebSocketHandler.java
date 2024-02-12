@@ -1,6 +1,7 @@
 package main.controller.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import main.dto.chat.ChatMessageDto;
@@ -13,6 +14,7 @@ import main.service.method.chat.ChatRoomMethod;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
+import org.springframework.boot.autoconfigure.jms.JmsProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
@@ -21,6 +23,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -30,21 +34,45 @@ import java.util.Set;
 public class WebSocketHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper;
     private final ChatRoomMethod chatRoomMethod;
+    private final List<WebSocketSession> chatMemberList = new ArrayList<>();
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        int sessionLenght = 0;
+        if (chatMemberList.isEmpty()) {
+            chatMemberList.add(session);
+        } else {
+            sessionLenght = chatMemberList.size();
+            boolean check = true;
+            for (int i = 0; i < sessionLenght; ++i) {
+                if (session.getPrincipal().getName().equals(chatMemberList.get(i).getPrincipal().getName())) {
+                    check = false;
+                    break;
+                }
+            }
+            if (check) {
+                chatMemberList.add(session);
+            }
+        }
+
         String payload = message.getPayload();
         ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
         ChatRoom chatRoom =  chatRoomMethod.findByRoomNumberOrNull(chatMessage.getRoomNumber());
 
         if (chatMessage.getMessageType().equals(ChatMessage.MessageType.ENTER)) {
-            chatMessage.setMessage(chatMessage.getUserEmail() + "님이 입장했습니다.");
-            session.sendMessage(new TextMessage(chatMessage.getMessage()));
+            for (int i = 0; i < sessionLenght; ++i) {
+                chatMessage.setMessage(chatMessage.getUserEmail() + "님이 입장했습니다.");
+                chatMemberList.get(i).sendMessage(new TextMessage(chatMessage.getUserEmail() + " : " + chatMessage.getMessage()));
+            }
         }
         else if (chatMessage.getMessageType().equals(ChatMessage.MessageType.QUIT)) {
-            chatMessage.setMessage(chatMessage.getUserEmail() + "님이 퇴장했습니다..");
-            session.sendMessage(new TextMessage(chatMessage.getMessage()));
+            for (int i = 0; i < sessionLenght; ++i) {
+                chatMessage.setMessage(chatMessage.getUserEmail() + "님이 퇴장했습니다.");
+                chatMemberList.get(i).sendMessage(new TextMessage(chatMessage.getUserEmail() + " : " + chatMessage.getMessage()));
+            }
         }else {
-            session.sendMessage(new TextMessage(chatMessage.getMessage()));
+            for (int i = 0; i < sessionLenght; ++i) {
+                chatMemberList.get(i).sendMessage(new TextMessage(chatMessage.getUserEmail() + " : " + chatMessage.getMessage()));
+            }
         }
     }
 }

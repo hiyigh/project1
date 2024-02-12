@@ -31,6 +31,9 @@ public class LayoutService {
         if (authentication != null) {
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
             user = userMethod.getUserByEmailOrNull(principalDetails.getUsername());
+
+            if (user==null) System.out.println("user is null");
+
             int roleLen = user.getRole().toString().length();
             userRole = user.getRole().toString();
         }

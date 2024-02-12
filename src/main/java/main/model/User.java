@@ -34,13 +34,49 @@ public class User extends Time {
         this.userSex = userSex;
         this.role = role;
     }
-    @Builder
-    public User(String userName, String userPassword, String userEmail, Role role, String provider, String providerId) {
-        this.userName = userName;
-        this.userPassword = userPassword;
-        this.userEmail = userEmail;
-        this.role = role;
-        this.provider = provider;
-        this.providerId = providerId;
+    public User(Oauth2UserBuilder oauth2UserBuilder) {
+        this.userName = oauth2UserBuilder.getUserName();
+        this.userPassword = oauth2UserBuilder.getUserPassword();
+        this.userEmail = oauth2UserBuilder.getUserEmail();
+        this.role = oauth2UserBuilder.getRole();
+        this.provider = oauth2UserBuilder.getProvider();
+        this.providerId = oauth2UserBuilder.getProviderId();
+    }
+    @Getter
+    public static class Oauth2UserBuilder {
+        private String userName;
+        private String userPassword;
+        private String userEmail;
+        private Role role;
+        private String provider;
+        private String providerId;
+        public Oauth2UserBuilder() {
+        }
+        public Oauth2UserBuilder userName(String userName) {
+            this.userName = userName;
+            return this;
+        }
+        public Oauth2UserBuilder userPassword(String userPassword){
+            this.userPassword = userPassword;
+            return this;
+        }
+        public Oauth2UserBuilder userEmail(String userEmail){
+            this.userEmail = userEmail;
+            return this;
+        }
+        public Oauth2UserBuilder role(Role role){
+            this.role = role;
+            return this;
+        }
+        public Oauth2UserBuilder provider(String provider){
+            this.provider = provider;
+            return this;
+        }public Oauth2UserBuilder providerId(String providerId){
+            this.providerId = providerId;
+            return this;
+        }
+        public User build() {
+            return new User(this);
+        }
     }
 }
