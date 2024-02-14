@@ -42,14 +42,7 @@ public class ChatController {
     public String getStart(Authentication authentication, Model model) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = userMethod.getUserByEmailOrNull(principalDetails.getUsername());
-
-        ChatRoom chatRoom = chatRoomRepository.findByUserAndOtherIdOrNull(user.getUserId());
-        if (chatRoom == null) {
-            chatRoom = chatRoomMethod.createRoom(user.getUserId(), adminId);
-        }
-
         model.addAttribute("user", user);
-        model.addAttribute("room", chatRoom);
         return "/chat/chat";
     }
     @PostMapping("/chat/createRoom")
@@ -61,16 +54,17 @@ public class ChatController {
         model.addAttribute("user", user);
 
         if (chatRoom != null) {
-            List<ChatMessageDto> chatMessageDtoList = chatMessageMethod.findMessageByRoomNumber(chatRoom.getRoomNumber());
-            ChatRoomWithMessageDto chatRoomWithMessageDto = new ChatRoomWithMessageDto(chatRoom, chatMessageDtoList);
+            List<ChatMessage> chatMessageList = chatMessageMethod.findMessageByRoomNumber(chatRoom.getRoomNumber());
+            ChatRoomWithMessageDto chatRoomWithMessageDto = new ChatRoomWithMessageDto(chatRoom, chatMessageList);
+
             model.addAttribute("roomInfo", chatRoomWithMessageDto);
 
             return "/chat/chatRoom";
         } else {
-            System.out.println("chat room is null ???");
+
             ChatRoom createNewRoom = chatRoomMethod.createRoom(user.getUserId(), adminId);
-            List<ChatMessageDto> chatMessageDtoList = new ArrayList<>();
-            ChatRoomWithMessageDto chatRoomWithMessageDto = new ChatRoomWithMessageDto(createNewRoom, chatMessageDtoList);
+            List<ChatMessage> chatMessageList = new ArrayList<>();
+            ChatRoomWithMessageDto chatRoomWithMessageDto = new ChatRoomWithMessageDto(createNewRoom, chatMessageList);
             model.addAttribute("roomInfo", chatRoomWithMessageDto);
             return "/chat/chatRoom";
         }
@@ -81,8 +75,8 @@ public class ChatController {
         List<ChatRoom> chatRoomList = chatRoomMethod.getAllRoomOrNull();
         if (chatRoomList != null) {
             for (ChatRoom chatRoom : chatRoomList) {
-                List<ChatMessageDto> chatMessageDtoList = chatMessageMethod.findMessageByRoomNumber(chatRoom.getRoomNumber());
-                chatRoomWithMessageDtoList.add(new ChatRoomWithMessageDto(chatRoom, chatMessageDtoList));
+                List<ChatMessage> chatMessageList = chatMessageMethod.findMessageByRoomNumber(chatRoom.getRoomNumber());
+                chatRoomWithMessageDtoList.add(new ChatRoomWithMessageDto(chatRoom, chatMessageList));
             }
             model.addAttribute("roomList", chatRoomWithMessageDtoList);
             return "/chat/chat";

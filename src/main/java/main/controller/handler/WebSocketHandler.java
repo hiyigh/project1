@@ -68,13 +68,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
             for (int i = 0; i < sessionLenght; ++i) {
                 chatMessage.setMessage(chatMessage.getUserEmail() + "님이 입장했습니다.");
                 chatMemberList.get(i).sendMessage(new TextMessage(chatMessage.getUserEmail() + " : " + chatMessage.getMessage()));
-
-                if (!chatMessageList.isEmpty()) {
-                    for (int j = 0; j < chatMessageList.size(); ++j) {
-                        ChatMessage msg = chatMessageList.get(j);
-                        chatMemberList.get(i).sendMessage(new TextMessage(msg.getUserEmail() + " : " + msg.getMessage()));
-                    }
-                }
             }
         }
         else if (chatMessage.getMessageType().equals(ChatMessage.MessageType.QUIT)) {
@@ -83,9 +76,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 chatMemberList.get(i).sendMessage(new TextMessage(chatMessage.getUserEmail() + " : " + chatMessage.getMessage()));
             }
         }else {
+            chatMessageRepository.save(chatMessage);
             for (int i = 0; i < sessionLenght; ++i) {
-                chatMessageRepository.save(chatMessage);
-                System.out.println("save chatMessage: " + i + chatMessage.getMessage());
                 chatMemberList.get(i).sendMessage(new TextMessage(chatMessage.getUserEmail() + " : " + chatMessage.getMessage()));
             }
         }

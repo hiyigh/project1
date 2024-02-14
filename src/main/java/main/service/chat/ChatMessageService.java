@@ -20,8 +20,7 @@ public class ChatMessageService implements ChatMessageMethod {
     }
 
     @Override
-    public List<ChatMessageDto> findMessageByRoomNumber(int roomNumber) {
-        chatMessageRepository.findMessageByRoomNumber(roomNumber);
-        return null;
+    public List<ChatMessage> findMessageByRoomNumber(int roomNumber) {
+        return chatMessageRepository.findMessageByRoomNumber(roomNumber);
     }
 }

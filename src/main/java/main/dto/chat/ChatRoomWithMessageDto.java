@@ -12,8 +12,8 @@ import java.util.List;
 @Setter
 public class ChatRoomWithMessageDto {
     private final ChatRoom chatRoom;
-    private final List<ChatMessageDto> chatMessageList;
-    public ChatRoomWithMessageDto(ChatRoom chatRoom, List<ChatMessageDto> chatMessageList){
+    private final List<ChatMessage> chatMessageList;
+    public ChatRoomWithMessageDto(ChatRoom chatRoom, List<ChatMessage> chatMessageList){
         this.chatRoom = chatRoom;
         this.chatMessageList = chatMessageList;
     }

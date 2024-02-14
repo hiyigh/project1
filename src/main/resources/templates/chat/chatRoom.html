@@ -15,27 +15,49 @@
 <body>
     <div class="box">
         <input type="text" placeholder="보낼 메세지를 입력하세요." class="content">
-        <button type="button" value="전송" class="sendBtn" onclick="sendMsg()">전송</button>
-        <button type="button" value="방나가기" class="quit" onclick="quit()">방 나가기 </button>
+        <button type="button" value="전송" class="sendBtn">전송</button>
+        <button type="button" value="방나가기" class="quit">방 나가기 </button>
         <br>
     </div>
     <div>
         <span>메세지</span>
-        <div class="msgArea">
+        <ul th:each="chatMessage : ${roomInfo.chatMessageList}">
+            <li>
+                <span th:text="${chatMessage.userEmail} + ':' + ${chatMessage.message}"></span>
+            </li>
+        </ul>
+        <div class="msgArea" style="margin-left:30px;">
         </div>
     </div>
-</body>
-
 <script th:inline="javascript">
-        var roomNumber = [[${roomInfo.chatRoom.roomNumber}]];
-        var userEmail =  [[${user.userEmail}]];
+    var roomNumber = [[${roomInfo.chatRoom.roomNumber}]];
+    var userEmail =  [[${user.userEmail}]];
 
-        let socket = new WebSocket("ws://localhost:8080/wss/chat");
+        function connectWebSocket() {
+            var socket = new WebSocket("ws://localhost:8080/wss/chat");
 
-        socket.onopen = function (e) {
-            console.log('open server!')
-            enterRoom(socket);
-        };
+            socket.onopen = function (e) {
+                console.log('서버 연결됨!');
+                enterRoom(socket);
+            };
+
+            socket.onerror = function (e) {
+                console.error('에러 발생:', e);
+            };
+
+            socket.onmessage = function (e) {
+                console.log('메세지 수신:', e.data);
+            };
+
+            socket.onclose = function (e) {
+                console.log('서버 연결 종료');
+                // 페이지가 새로고침되지 않도록 예방하는 로직을 추가할 수 있음
+            };
+
+            return socket;
+        }
+
+        var socket = connectWebSocket();
 
         function enterRoom(socket){
             var enterMsg = {
@@ -47,21 +69,8 @@
             socket.send(JSON.stringify(enterMsg));
         }
 
-        socket.onerror = function (e){
-            console.log(e);
-        }
-
-        //메세지 수신했을 때 이벤트.
-        socket.onmessage = function (e) {
-            console.log(e.data);
-            let msgArea = document.querySelector('.msgArea');
-            let newMsg = document.createElement('div');
-            newMsg.innerText = e.data;
-            msgArea.append(newMsg);
-        }
-
         function sendMsg() {
-            var content = $('.content').val();
+            var content = document.querySelector('.content').value;
 
             var talkMsg = {
                 "messageType" : "TALK",
@@ -85,9 +94,15 @@
             window.location.href="/chat";
         }
 
-        socket.onclose=function(e){
-            console.log('disconnet');
+        socket.onmessage = function (e) {
+            console.log(e.data);
+            let msgArea = document.querySelector('.msgArea');
+            let newMsg = document.createElement('div');
+            newMsg.innerText = e.data;
+            msgArea.append(newMsg);
         }
+        document.querySelector('.sendBtn').addEventListener('click',sendMsg);
+        document.querySelector('.quit').addEventListener('click',quit);
 </script>
-
+</body>
 </html>
