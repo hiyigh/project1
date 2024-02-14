@@ -35,7 +35,7 @@ public class    ShopController {
     private final LayoutService layoutService;
     private final UserMethod userMethod;
     @GetMapping("/shopList/{curPage}")
-    public String shopList(@PathVariable int curPage,Model model, Authentication authentication) {
+    public String shopList(@PathVariable int curPage, Model model, Authentication authentication) {
         layoutService.addLayout(model, authentication);
         List<Item> items = shoppingMethod.getRecentItems();
         Pagination page = Pagination.paging(curPage, items.size());
@@ -51,16 +51,16 @@ public class    ShopController {
         Item item = shoppingMethod.getItem(itemId);
         layoutService.addLayout(model, authentication);
         List<Menu> menus = layoutService.getMenu(EMenu.SHOP);
+
+        item.setHits(item.getHits() + 1);
+        shoppingMethod.addHit(item);
         model.addAttribute("item", item);
         model.addAttribute("menus", menus);
-
-        System.out.println("itemdetail: " + model.getAttribute("userRole"));
-
         return "/shop/itemDetail";
     }
-    @GetMapping("/order")
+    @GetMapping("/order/{orderId}")
     @ResponseBody
-    public List<Item> orderItems(@RequestParam int orderId) {
+    public List<Item> orderItems(@PathVariable int orderId) {
         List<Item> items = new ArrayList<>();
         switch(orderId) {
             case 1:

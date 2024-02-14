@@ -9,6 +9,7 @@ import main.service.method.CommentMethod;
 import main.service.method.UserMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import retrofit2.http.POST;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,25 +42,24 @@ public class CommentController {
         List<Comment> updateCommentList = commentMethod.getCommentByPostId(postId);
         return updateCommentList;
     }
-    @GetMapping("/addReComment")
+    @GetMapping("/addReComment/{parentId}")
     @ResponseBody
-    public List<Comment> reCommentList(@RequestParam Long parentId) {
+    public List<Comment> reCommentList(@PathVariable Long parentId) {
         List<Comment> reCommentList = commentMethod.getCommentByParentId(parentId);
         return reCommentList;
     }
-    @PutMapping("/edit")
-    public void editComment(@RequestParam Long commentId, @RequestParam String editComment) {
+    @PostMapping("/edit")
+    @ResponseBody
+    public String editComment(@RequestParam Long commentId, @RequestParam String editedComment) {
         Comment comment = commentMethod.getCommentById(commentId);
-        comment.setCommentContent(editComment);
+        comment.setCommentContent(editedComment);
         commentMethod.update(comment);
+        return "success";
     }
-    @PutMapping("/delete")
-    public void deleteComment(@RequestParam Long commentId) {
-        Comment comment = commentMethod.getCommentById(commentId);
-        if (comment.getMainCommentId() == null) {
-            commentMethod.deleteByParentId(commentId);
-        } else {
-            commentMethod.delete(commentId);
-        }
+    @GetMapping("/delete/{commentId}")
+    @ResponseBody
+    public String deleteComment(@PathVariable Long commentId) {
+        commentMethod.delete(commentId);
+        return "success";
     }
 }

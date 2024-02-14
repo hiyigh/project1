@@ -8,6 +8,7 @@ import main.dto.chat.ChatMessageDto;
 import main.model.chat.ByteArrayMultipartFile;
 import main.model.chat.ChatMessage;
 import main.model.chat.ChatRoom;
+import main.repository.chat.ChatMessageRepository;
 import main.service.chat.AwsS3Service;
 import main.service.method.chat.ChatMessageMethod;
 import main.service.method.chat.ChatRoomMethod;
@@ -34,6 +35,7 @@ import java.util.Set;
 public class WebSocketHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper;
     private final ChatRoomMethod chatRoomMethod;
+    private final ChatMessageRepository chatMessageRepository;
     private final List<WebSocketSession> chatMemberList = new ArrayList<>();
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -53,15 +55,26 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 chatMemberList.add(session);
             }
         }
-
         String payload = message.getPayload();
         ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
-        ChatRoom chatRoom =  chatRoomMethod.findByRoomNumberOrNull(chatMessage.getRoomNumber());
+
 
         if (chatMessage.getMessageType().equals(ChatMessage.MessageType.ENTER)) {
+            ChatRoom chatRoom =  chatRoomMethod.findByRoomNumberOrNull(chatMessage.getRoomNumber());
+            List<ChatMessage> chatMessageList = new ArrayList<>();
+            if (chatRoom != null) {
+                chatMessageList = chatMessageRepository.findMessageByRoomNumber(chatRoom.getRoomNumber());
+            }
             for (int i = 0; i < sessionLenght; ++i) {
                 chatMessage.setMessage(chatMessage.getUserEmail() + "님이 입장했습니다.");
                 chatMemberList.get(i).sendMessage(new TextMessage(chatMessage.getUserEmail() + " : " + chatMessage.getMessage()));
+
+                if (!chatMessageList.isEmpty()) {
+                    for (int j = 0; j < chatMessageList.size(); ++j) {
+                        ChatMessage msg = chatMessageList.get(j);
+                        chatMemberList.get(i).sendMessage(new TextMessage(msg.getUserEmail() + " : " + msg.getMessage()));
+                    }
+                }
             }
         }
         else if (chatMessage.getMessageType().equals(ChatMessage.MessageType.QUIT)) {
@@ -71,6 +84,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
             }
         }else {
             for (int i = 0; i < sessionLenght; ++i) {
+                chatMessageRepository.save(chatMessage);
+                System.out.println("save chatMessage: " + i + chatMessage.getMessage());
                 chatMemberList.get(i).sendMessage(new TextMessage(chatMessage.getUserEmail() + " : " + chatMessage.getMessage()));
             }
         }

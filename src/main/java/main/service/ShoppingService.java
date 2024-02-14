@@ -71,4 +71,9 @@ public class ShoppingService implements ShoppingMethod {
     public void addItem(ItemDto itemDto) {
         shopRepoMethod.addItem(itemDto);
     }
+
+    @Override
+    public void addHit(Item item) {
+        shopRepoMethod.addHit(item);
+    }
 }

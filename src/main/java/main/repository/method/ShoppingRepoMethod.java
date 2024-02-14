@@ -28,4 +28,6 @@ public interface ShoppingRepoMethod {
 
     void deleteItem(int itemId);
     void addItem(ItemDto itemDto);
+
+    void addHit(Item item);
 }

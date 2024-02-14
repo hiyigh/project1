@@ -78,4 +78,10 @@ public class ShoppingRepository implements ShoppingRepoMethod {
         String sql = "insert into Items (imgUrl, itemName, price, detail, hits, inventoryCount, soldCount) values (?,?,?,?,0,?,0)";
         jdbcTemplate.update(sql, itemDto.getImgUrl(), itemDto.getItemName(), itemDto.getPrice(), itemDto.getDetail(), itemDto.getInventoryCount());
     }
+
+    @Override
+    public void addHit(Item item) {
+        String sql = "update Items set hits = ? where itemId = ?";
+        jdbcTemplate.update(sql, item.getHits(), item.getItemId());
+    }
 }

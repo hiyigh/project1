@@ -21,7 +21,7 @@
 
         <div class="grid-border">
             <ul class="grid-container" style="margin-left:100px; margin-right:100px;">
-                <li th:each="item : ${items}" class="images grid-item" style="width:249px; height:324px;">
+                <li th:each="item : ${items}" class="images grid-item" style="width:100%; height:auto;">
                     <a th:href="'/shop/item/' + ${item.itemId}" class="item-link" style="cursor:pointer" >
                         <img th:src="${item.imgUrl}" class="image">
                     </a>
@@ -34,20 +34,22 @@
                 </li>
             </ul>
         </div>
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <li th:if="${page.curPageNum} > 1" class="page-item">
-                <a th:data-page="${page.curPageNum - 1}" class="page-link">previous</a>
-            </li>
-            <li th:each="curPage : ${#numbers.sequence(page.startPageNum, page.endPageNum)}"
-                th:class="${curPage == page.curPageNum} ? 'page-item active' : 'page-item' ">
-                <a th:data-page="${curPage}" class="page-link" th:text="${curPage}"></a>
-            </li>
-            <li th:if="${page.curPageNum < page.endPageNum}" class="page-item">
-                <a th:data-page="${page.curPageNum + 1}" class="page-link">next</a>
-            </li>
-        </ul>
-    </nav>
+    <div class="nav-style" style="margin-left:50%;">
+        <nav aria-label="Page navigation" >
+            <ul class="pagination">
+                <li th:if="${page.curPageNum} > 1" class="page-item">
+                    <a th:data-page="${page.curPageNum - 1}" class="page-link">previous</a>
+                </li>
+                <li th:each="curPage : ${#numbers.sequence(page.startPageNum, page.endPageNum)}"
+                    th:class="${curPage == page.curPageNum} ? 'page-item active' : 'page-item' ">
+                    <a th:data-page="${curPage}" class="page-link" th:text="${curPage}"></a>
+                </li>
+                <li th:if="${page.curPageNum < page.endPageNum}" class="page-item">
+                    <a th:data-page="${page.curPageNum + 1}" class="page-link">next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
     <script>
 
     $(document).ready(function(){
@@ -63,25 +65,21 @@
 
         $.ajax({
             type:'GET',
-            url:'/shop/order',
-            data:{orderId : orderId},
+            url:'/shop/order/' + orderId,
             success:function(response){
-
                 $('.grid-container').empty();
                 var html = "";
                 for (let i = 0; i < response.length; i++) {
-                    html += '<ul class="grid-container">';
                     html += '<li class="images grid-item">';
-                    html += '<a href="#" class="item-link" style="cursor:pointer" th:data-item-id="' + response[i].itemId + '"></a>';
+                    html += '<a href="/shop/item/' + response[i].itemId + '" class="item-link" style="cursor:pointer" data-item-id="' + response[i].itemId + '"></a>';
                     html += '<img src="' + response[i].imgUrl + '" class="image">';
                     html += '<div class="item-text">';
-                    html += '<span th:text="' + response[i].itemName + '" class="detail-name"></span>';
+                    html += '<span class="detail-name">' + response[i].itemName + '</span>';
                     html += '</div>';
                     html += '<div class="item-price">';
-                    html += '<span th:text="' + response[i].price + '" class="detail-price"></span>';
+                    html += '<span class="detail-price">' + response[i].price + '</span>';
                     html += '</div>';
                     html += '</li>';
-                    html += '</ul>';
                 }
                 $('.grid-container').html(html);
             },

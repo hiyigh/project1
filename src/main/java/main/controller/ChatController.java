@@ -43,7 +43,7 @@ public class ChatController {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = userMethod.getUserByEmailOrNull(principalDetails.getUsername());
 
-        ChatRoom chatRoom = chatRoomRepository.findByUserAndOtherIdOrNull(user.getUserId(), adminId);
+        ChatRoom chatRoom = chatRoomRepository.findByUserAndOtherIdOrNull(user.getUserId());
         if (chatRoom == null) {
             chatRoom = chatRoomMethod.createRoom(user.getUserId(), adminId);
         }
@@ -57,7 +57,7 @@ public class ChatController {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = userMethod.getUserByEmailOrNull(principalDetails.getUsername());
         assert(user != null);
-        ChatRoom chatRoom = chatRoomRepository.findByUserAndOtherIdOrNull(user.getUserId(), adminId);
+        ChatRoom chatRoom = chatRoomRepository.findByUserAndOtherIdOrNull(user.getUserId());
         model.addAttribute("user", user);
 
         if (chatRoom != null) {
@@ -67,6 +67,7 @@ public class ChatController {
 
             return "/chat/chatRoom";
         } else {
+            System.out.println("chat room is null ???");
             ChatRoom createNewRoom = chatRoomMethod.createRoom(user.getUserId(), adminId);
             List<ChatMessageDto> chatMessageDtoList = new ArrayList<>();
             ChatRoomWithMessageDto chatRoomWithMessageDto = new ChatRoomWithMessageDto(createNewRoom, chatMessageDtoList);

@@ -3,9 +3,10 @@
         float:right;
         display:none;
     }
-    .grid-conta iner{
+    .grid-container {
         display: grid;
-        grid-template-columns: repeat(auto-fill,minmax(300px,auto));
+        gird-template-columns: 1fr;
+        gird-template-rows: 1fr;
         padding:50px;
         margin:50px;
     }

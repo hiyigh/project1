@@ -22,10 +22,10 @@ public class ChatRoomRepository {
             return null;
         }
     }
-    public ChatRoom findByUserAndOtherIdOrNull(Long userId, Long otherId) {
-        String sql = "select * from Rooms where userId = ? and otherId = ?";
+    public ChatRoom findByUserAndOtherIdOrNull(Long userId) {
+        String sql = "select * from Rooms where userId = ? or otherId = ? limit 1";
         try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{userId, otherId}, new BeanPropertyRowMapper<>(ChatRoom.class));
+            return jdbcTemplate.queryForObject(sql, new Object[]{userId, userId}, new BeanPropertyRowMapper<>(ChatRoom.class));
         } catch(EmptyResultDataAccessException e) {
             e.printStackTrace();
             return null;
@@ -36,7 +36,7 @@ public class ChatRoomRepository {
         String sql = "insert into Rooms (userId, otherId) values(?,?)";
         jdbcTemplate.update(sql, userId, otherId);
 
-        ChatRoom chatRoom = findByUserAndOtherIdOrNull(userId, otherId);
+        ChatRoom chatRoom = findByUserAndOtherIdOrNull(userId);
         return chatRoom;
     }
 

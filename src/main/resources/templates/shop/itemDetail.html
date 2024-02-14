@@ -44,20 +44,24 @@
 <header th:replace="~{/layout/layout.html::header}"></header>
 <body>
 <section th:replace="~{/layout/sidebar.html::sidebar}"></section>
-    <div class="item-explanation">
+    <div class="item-explanation" style="border:solid 2px;">
         <div class="item-url">
             <img th:src="${item.imgUrl}" class="image">
         </div>
         <div class="item-name">
+            <label>제품명: </label>
             <span class="itemName" th:text="${item.itemName}"></span>
         </div>
         <div class="item-detail">
+            <label>설명: </label>
             <span class="detail" th:text="${item.detail}"></span>
         </div>
         <div class="item-price">
+            <label>가격: </label>
             <span class="price" th:text="${item.price}"></span>
         </div>
         <div class="item-hits">
+            <label>조회수: </label>
             <span class="hits" th:text="${item.hits}"></span>
         </div>
     </div>

@@ -30,6 +30,13 @@
         var roomNumber = [[${roomInfo.chatRoom.roomNumber}]];
         var userEmail =  [[${user.userEmail}]];
 
+        let socket = new WebSocket("ws://localhost:8080/wss/chat");
+
+        socket.onopen = function (e) {
+            console.log('open server!')
+            enterRoom(socket);
+        };
+
         function enterRoom(socket){
             var enterMsg = {
                 "messageType" : "ENTER",
@@ -38,15 +45,6 @@
                 "message" : ""
             };
             socket.send(JSON.stringify(enterMsg));
-        }
-        let socket = new WebSocket("ws://localhost:8080/wss/chat");
-
-        socket.onopen = function (e) {
-            console.log('open server!')
-            enterRoom(socket);
-        };
-        socket.onclose=function(e){
-            console.log('disconnet');
         }
 
         socket.onerror = function (e){
@@ -85,6 +83,10 @@
             socket.send(JSON.stringify(quitMsg));
             socket.close();
             window.location.href="/chat";
+        }
+
+        socket.onclose=function(e){
+            console.log('disconnet');
         }
 </script>
 
