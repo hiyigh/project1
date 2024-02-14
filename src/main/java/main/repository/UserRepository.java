@@ -1,6 +1,7 @@
 package main.repository;
 
 import lombok.RequiredArgsConstructor;
+import main.model.enumeration.AddOrDelete;
 import main.model.enumeration.HistoryType;
 import main.model.User;
 import main.repository.method.UserRepoMethod;
@@ -63,7 +64,7 @@ public class UserRepository implements UserRepoMethod {
     }
 
     @Override
-    public void setUserHistory(Long userId, Integer newData, HistoryType type) {
+    public void setUserHistory(Long userId, Integer newData, HistoryType type, AddOrDelete addOrDelete) {
         String element = "";
         switch(type) {
             case COMMENT:
@@ -80,16 +81,44 @@ public class UserRepository implements UserRepoMethod {
         String oldData = "";
         String updateString = "";
         try{
+
             oldData = jdbcTemplate.queryForObject(sql, new Object[]{userId}, String.class);
-            updateString = appendData(oldData, newData);
+
+            if (addOrDelete == AddOrDelete.ADD) {
+                updateString = appendData(oldData, newData);
+
+            } else {
+                updateString = deleteData(oldData, newData);
+                updateString = updateString.substring(1, updateString.length()-1);
+            }
             String updateSql = "update Users set " + element + " = ? where userId = ?";
             jdbcTemplate.update(updateSql, updateString, userId);
         } catch(EmptyResultDataAccessException e) {
+
             updateString = appendData(oldData, newData);
             String updateSql = "update Users set " + element + " = ? where userId = ?";
             jdbcTemplate.update(updateSql, updateString, userId);
         }
     }
+
+    private String deleteData(String oldData, Integer newData) {
+        if (oldData == null) return null;
+        String[] array = oldData.split(",");
+        List<Integer> toInteger = new ArrayList<>();
+
+        for (String st : array) {
+            try {
+                int num = Integer.parseInt(st.trim());
+                toInteger.add(num);
+            } catch (NumberFormatException e){
+                e.printStackTrace();
+            }
+        }
+        toInteger.remove(newData);
+
+        return String.valueOf(toInteger);
+    }
+
     private String appendData(String oldData, Integer newData) {
         if (oldData == null) return Integer.toString(newData);
         return oldData + "," + Integer.toString(newData);
@@ -99,6 +128,7 @@ public class UserRepository implements UserRepoMethod {
         try {
             String currentHistory = jdbcTemplate.queryForObject("select commentHistory from Users where userId = ?", new Object[]{userId},
                     String.class);
+            currentHistory = currentHistory.substring(1, currentHistory.length()-1);
             List<Integer> commentHistory = pareTEXTData(currentHistory);
             return commentHistory;
         } catch (EmptyResultDataAccessException e) {
@@ -110,6 +140,7 @@ public class UserRepository implements UserRepoMethod {
         try {
             String currentHistory = jdbcTemplate.queryForObject("select postHistory from Users where userId = ?", new Object[]{userId},
                     String.class);
+            currentHistory = currentHistory.substring(1, currentHistory.length() - 1);
             List<Integer> postHistory = pareTEXTData(currentHistory);
             return postHistory;
         } catch (EmptyResultDataAccessException e) {
@@ -130,11 +161,15 @@ public class UserRepository implements UserRepoMethod {
     }
 
     private List<Integer> pareTEXTData(String cHistory) {
-        String[] array = cHistory.split(",");
         List<Integer> result = new ArrayList<>();
+
+        if (cHistory.isEmpty()) {
+            return result;
+        }
+        String[] array = cHistory.split(",");
         for (int i = 0; i < array.length; ++i) {
             try {
-                result.add(Integer.parseInt(array[i]));
+                result.add(Integer.parseInt(array[i].trim()));
             }catch (NumberFormatException e){
                 e.printStackTrace();
             }

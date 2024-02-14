@@ -29,15 +29,14 @@
         <li th:each="item : ${items}">
             <div class="item-basket">
                 <div class="item-img">
-                    <img th:src="'/' + ${item.imgUrl}" class="img">
+                    <img th:src="${item.imgUrl}" class="img">
                 </div>
                 <br>
                 <div class="item-itemName">
-                    <span th:text="${item.itemName}" class="itemName"></span>
+                    <span th:text="${item.itemName} + ':' + ${item.price}" class="itemName"></span>
                 </div>
-                <br>
-                <div class="item-price">
-                    <span th:text="${item.price}" class="price"></span>
+                <div>
+                    <button type="button" class="btn cancelButton" th:data-item-id="${item.itemId}">취소하기</button>
                 </div>
             </div>
         </li>
@@ -49,9 +48,25 @@
 <div class="buy-button">
     <button type="button" class="btn" id="buyButton">결제하기</button>
 </div>
-<script>
+<script th:inline="javascript">
     $('#buyButton').click(function(){
         window.location.href='/shop/payment';
+    });
+    $('.cancelButton').click(function(){
+        var itemId = $(this).data('item-id');
+console.log(typeof itemId);
+console.log(itemId);
+        $.ajax({
+            type:'GET',
+            url:'/shop/cancelItem/' + itemId,
+            success: function(response){
+                console.log(response);
+                location.reload();
+            },
+            error: function(error) {
+                console.log('error',error);
+            }
+        });
     });
 </script>
 </body>

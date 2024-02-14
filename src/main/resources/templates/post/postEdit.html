@@ -7,17 +7,23 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 400px;
+        width: 30%;
         padding: 20px;
-        border: 1px solid #ccc;
+        border: 2px solid #ccc;
         border-radius: 8px;
+        margin:auto;
+        margin-top:50px;
     }
 
-    .editPostForm label,
-    .editPostForm input,
-    .editPostForm textarea,
-    .editPostForm button {
-        margin-bottom: 10px;
+    .edit-form select,
+    .edit-form input,
+    .edit-form textarea,
+    .edit-form button {
+        margin-bottom: 15px;
+        border:1px solid #ccc;
+        width:100%;
+        box-sizing:border-box;
+        font-size:16px;
     }
     </style>
 </head>
@@ -42,13 +48,14 @@
                 <textarea id="newContent" th:text="${post.postContent}"></textarea><br />
 
                 <button type="button" onclick="editPost()">수정</button>
+                <button type="button" onclick="cancelEdit(this)">취소</button>
             </form>
         </div>
 
         <script>
         var categoryId;
         $('#categoryTitle').change(function(){
-            categoryId = $(this).find(::selected).data('category-id');
+            categoryId = $(this).find(':selected').data('category-id');
         });
 
         function editPost() {
@@ -76,6 +83,10 @@
                     console.log("수정 에러", error);
                 }
             });
+        }
+        function cancelEdit(button) {
+            var postId = $('#postId').val();
+            window.location.href='/post/view/' + postId;
         }
     </script>
     <script th:src="@{/js/sidebar.js}"></script>

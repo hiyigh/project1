@@ -2,6 +2,7 @@ package main.service;
 
 import lombok.RequiredArgsConstructor;
 import main.model.User;
+import main.model.enumeration.AddOrDelete;
 import main.model.enumeration.HistoryType;
 import main.repository.UserRepository;
 import main.repository.method.UserRepoMethod;
@@ -46,8 +47,8 @@ public class UserService implements UserMethod {
     }
 
     @Override
-    public void setUserHistory(Long userId, Integer newData, HistoryType type) {
-        userRepoMethod.setUserHistory(userId, newData, type);
+    public void setUserHistory(Long userId, Integer newData, HistoryType type, AddOrDelete addOrDelete) {
+        userRepoMethod.setUserHistory(userId, newData, type, addOrDelete);
     }
 
     @Override

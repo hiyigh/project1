@@ -177,11 +177,21 @@
                 }
             });
 
-            $('#toggle-btn' + commentId).hide();
+            $('#toggle-btn_' + commentId).hide();
             $('#commentMod' + commentId).show();
             $('#commentDel' + commentId).show();
         }
 
+        function cancelEdit(button) {
+            var commentId = $(button).data('comment-id');
+            var commentContent = $(button).closest('li').find('#commentText_' + commentId).text();
+
+            $('#commentText_' + commentId).text(commentContent);
+
+            $('#commentMod_' + commentId).show();
+            $('#commentDel_' + commentId).show();
+            $('#toggle-btn_' + commentId).hide();
+        }
 
 
         $(document).on("click","#commentDel", function() {

@@ -90,9 +90,8 @@ public class MainController {
             return "post/postList";
         }
         Pagination page = Pagination.paging(curPage, totalList.size());
-
         List<Post> postList = new ArrayList<>();
-        for (int i = page.getListStartNum() ; i < page.getListEndNum(); ++i) {
+        for (int i = page.getListStartNum() ; i < page.getListEndNum() + 1; ++i) {
             postList.add(totalList.get(i - 1));
         }
         model.addAttribute("admitWritePost", "postList");

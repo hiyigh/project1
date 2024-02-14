@@ -6,6 +6,7 @@ import main.dto.PrincipalDetails;
 import main.model.Item;
 import main.model.Menu;
 import main.model.User;
+import main.model.enumeration.AddOrDelete;
 import main.model.enumeration.EMenu;
 import main.model.enumeration.HistoryType;
 import main.service.LayoutService;
@@ -122,7 +123,7 @@ public class    ShopController {
         if (user.getBasket() == null) {
             user.setBasket("");
         }
-        userMethod.setUserHistory(user.getUserId(),itemId, HistoryType.BASKET);
+        userMethod.setUserHistory(user.getUserId(),itemId, HistoryType.BASKET, AddOrDelete.ADD);
         return "redirect:/shop";
     }
     @GetMapping("/basket")
@@ -171,6 +172,15 @@ public class    ShopController {
         model.addAttribute("totalPrice", totalPrice);
 
         return "/shop/itemBuy";
+    }
+    @GetMapping("/cancelItem/{itemId}")
+    @ResponseBody
+    public String cancelItem(@PathVariable int itemId, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userMethod.getUserByEmailOrNull(principalDetails.getUsername());
+
+        userMethod.setUserHistory(user.getUserId(),itemId,HistoryType.BASKET, AddOrDelete.DELETE);
+        return "delete item";
     }
     @GetMapping("/list")
     public String searchList(@RequestParam int curPage, @RequestParam String keyword, Model model, Authentication authentication){

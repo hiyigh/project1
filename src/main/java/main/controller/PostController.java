@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import main.dto.PostDto;
 import main.dto.PrincipalDetails;
 import main.model.*;
+import main.model.enumeration.AddOrDelete;
 import main.model.enumeration.HistoryType;
 import main.service.CategoryService;
 import main.service.CommentService;
@@ -56,7 +57,7 @@ public class PostController {
                 if(user != null) {
                     Long postId = postMethod.getLastPostIdOrNull() + 1l;
 
-                    userMethod.setUserHistory(user.getUserId(), postId.intValue(), HistoryType.POST);
+                    userMethod.setUserHistory(user.getUserId(), postId.intValue(), HistoryType.POST, AddOrDelete.ADD);
                     postDto.setPostId(postId);
                     postDto.setUserId(user.getUserId());
                 }
@@ -78,12 +79,12 @@ public class PostController {
         layoutService.addLayout(model, authentication);
 
         postMethod.update(postDto);
-        return "redirect:/post/view/" + postDto.getPostId();
+        return "redirect:/board/" + 1;
     }
     @GetMapping("/delete")
     public String deletePost(@RequestParam Long postId) {
         postMethod.delete(postId);
-        return "redirect:/board";
+        return "redirect:/board/" + 1;
     }
     @GetMapping("/view/{postId}")
     public String viewPost(@PathVariable Long postId, Model model, Authentication authentication) {

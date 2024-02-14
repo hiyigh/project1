@@ -1,6 +1,7 @@
 package main.repository.method;
 
 import main.model.User;
+import main.model.enumeration.AddOrDelete;
 import main.model.enumeration.HistoryType;
 
 import java.util.List;
@@ -13,8 +14,10 @@ public interface UserRepoMethod {
     User getUserByEmailOrNull(String userEmail);
 
     List<User> getAllUsers();
-    void setUserHistory(Long userId, Integer newData, HistoryType type);
     List<Integer> getPostHistory(Long userId);
+
+    void setUserHistory(Long userId, Integer newData, HistoryType type, AddOrDelete addOrDelete);
+
     List<Integer> getCommentHistory(Long userId);
     List<Integer> getBasket(Long userId);
 
