@@ -1,6 +1,6 @@
 # 구현 영상
 ### 비회원
-<img src="https://github.com/hiyigh/project1/assets/112844031/dee0de25-c6fb-44bb-b4e0-2e1c142bfb02">
+<img width="80%" src="https://github.com/hiyigh/project1/assets/112844031/dee0de25-c6fb-44bb-b4e0-2e1c142bfb02">
 
 ### 회원
 <img src="https://github.com/hiyigh/project1/assets/112844031/47d81647-8ff2-4d43-9e3b-412cd9ced1a6">
