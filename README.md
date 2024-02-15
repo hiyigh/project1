@@ -1,6 +1,12 @@
 # 구현 영상
--비회원
+### 비회원
 <img src="https://github.com/hiyigh/project1/assets/112844031/13db3b9c-88d5-4429-b8cd-0c5e2d05d3aa">
+
+### 회원
+<img src="https://github.com/hiyigh/project1/assets/112844031/47d81647-8ff2-4d43-9e3b-412cd9ced1a6">
+
+### 관리자
+<img src="https://github.com/hiyigh/project1/assets/112844031/b275fd34-2b57-4241-82e0-40f2e172ec59">
 
 # 목표
 - 기초적인 crud 이외에 다른 기능들을 추가
