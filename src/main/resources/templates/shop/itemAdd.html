@@ -26,7 +26,9 @@
 <body>
     <section>
         <div class="item-container">
-            <h2>아이템 제품 추가</h2>
+            <div style="text-content:center;">
+                <h2>아이템 제품 추가</h2>
+            </div>
             <form id="addItemForm" method="post" action="/shop/add" enctype="multipart/form-data">
                 <div class="form-img">
                     <label for="itemImg">아이템 이미지:</label>
@@ -75,6 +77,7 @@
             success: function (response) {
                 alert('add item success');
                 console.log('성공:', response);
+                window.location.href='/shop';
             },
             error: function (error) {
                 alert('add item fail');

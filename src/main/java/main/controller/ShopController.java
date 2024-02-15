@@ -180,7 +180,7 @@ public class    ShopController {
         User user = userMethod.getUserByEmailOrNull(principalDetails.getUsername());
 
         userMethod.setUserHistory(user.getUserId(),itemId,HistoryType.BASKET, AddOrDelete.DELETE);
-        return "delete item";
+        return "delete item at user list";
     }
     @GetMapping("/list")
     public String searchList(@RequestParam int curPage, @RequestParam String keyword, Model model, Authentication authentication){
@@ -190,5 +190,11 @@ public class    ShopController {
         model.addAttribute("page", page);
         model.addAttribute("items", items);
         return "/shop/shopList";
+    }
+    @GetMapping("/delete/{deleteId}")
+    @ResponseBody
+    public String deleteItemList(@PathVariable int deleteId) {
+        shoppingMethod.deleteItem(deleteId);
+        return "delete item at item List";
     }
 }

@@ -28,14 +28,9 @@
                         <span>글 작성</span>
                     </a>
                 </li>
-                <li th:if="${menu.link !='/post/category/'} and ${userRole} == 'ROLE_ADMIN'">
+                <li th:if="${not #strings.equals(menu.link,'/post/category/') and #strings.equals(userRole,'ROLE_ADMIN')}">
                     <a th:href="@{/shop/add}">
                         <span>아이템 추가</span>
-                    </a>
-                </li>
-                <li th:if="${menu.link !='/post/category/'} and ${userRole} == 'ROLE_ADMIN'">
-                    <a th:href="@{/shop/delete}">
-                        <span>아이템 삭제</span>
                     </a>
                 </li>
                 <ul>

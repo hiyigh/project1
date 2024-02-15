@@ -61,12 +61,13 @@
 
     </sytle>
 </head>
+<header th:replace="~{/layout/layout.html::header}"></header>
 <body>
     <div class="item-container">
         <ul>
             <li th:each="item : ${items}">
                 <div>
-                    <img th:src="'/' + ${item.imgUrl}" class="image">
+                    <img th:src="${item.imgUrl}" class="image">
                 </div>
                 <th:block>
                     <label for="item-name">제품명: </label>

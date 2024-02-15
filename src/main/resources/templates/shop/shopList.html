@@ -31,6 +31,9 @@
                     <div class="item-price">
                         <span th:text="${item.price}" class="detail-price"></span>
                     </div>
+                    <div class="delete-item" th:if="${#strings.equals(userRole,'ROLE_ADMIN')}">
+                        <button class="btn" type="button" th:data-delete-item-id="${item.itemId}" onclick="deleteItem(this)">삭제</button>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -71,8 +74,9 @@
                 var html = "";
                 for (let i = 0; i < response.length; i++) {
                     html += '<li class="images grid-item">';
-                    html += '<a href="/shop/item/' + response[i].itemId + '" class="item-link" style="cursor:pointer" data-item-id="' + response[i].itemId + '"></a>';
+                    html += '<a href="/shop/item/' + response[i].itemId + '" class="item-link" style="cursor:pointer" data-item-id="' + response[i].itemId + '">';
                     html += '<img src="' + response[i].imgUrl + '" class="image">';
+                    html += '</a>';
                     html += '<div class="item-text">';
                     html += '<span class="detail-name">' + response[i].itemName + '</span>';
                     html += '</div>';
@@ -100,18 +104,22 @@
             }
         });
     });
-    $('#add-delete').click(function(){
+    function deleteItem(button) {
+        var deleteId = $(button).data('delete-item-id');
         $.ajax({
             type:'GET',
-            url:'/shop/delete',
+            url:'/shop/delete/' + deleteId,
             success:function(){
                 alert('item delete');
+                location.reload();
             },
             error:function(){
                 alert('item delete error');
             }
         });
-    });
+    };
+
+
 </script>
 </body>
 </html>

@@ -59,7 +59,7 @@
     </div>
 
     <div th:if="${#authorization.expression('isAuthenticated')}">
-        <div class="post-button" th:if="${postUser.userId} == ${loginUser.userId} or ${loginUser.role} == 'ROLE_ADMIN'">
+        <div class="post-button" th:if="${postUser.userId} == ${loginUser.userId} or ${#strings.equals(loginUser.role,'ROLE_ADMIN')}">
 
             <a th:href="@{/post/edit(postId=${post.getPostId()})}">
                 <button type="button" class="btn btn-warning">글 수정</button>
@@ -104,8 +104,8 @@
                         class='btn' th:id="'commentMod_' + ${comment.commentId}" th:data-modify-id="${comment.commentId}"
                         onclick="toggleEditMode(this)"> 수정
                 </button>
-                <button th:if="${loginUser.role == 'ROLE_ADMIN' or (comment.userId == loginUser.userId)}"
-                        style='cursor: pointer; color: blue' class='btn' th:id="'commentDel_' + ${comment.commentId}" th:data-delete-id="${comment.commentId}">삭제
+                <button th:if="${#strings.equals(loginUser.role,'ROLE_ADMIN')} or ${comment.userId} == ${loginUser.userId}"
+                        style='cursor: pointer; color: blue' class='btn' th:data-delete-id="${comment.commentId}" onclick="commentDel(this)">삭제
                 </button>
                 <div th:id="'toggle-btn_' + ${comment.commentId}" style="display: none;">
                     <button th:data-comment-id="${comment.commentId}" onclick="saveChanges(this)">완료</button>
@@ -193,9 +193,8 @@
             $('#toggle-btn_' + commentId).hide();
         }
 
-
-        $(document).on("click","#commentDel", function() {
-            var commentId = $(this).data('delete-id');
+        function commentDel(button) {
+            var commentId = $(button).data('delete-id');
             $.ajax({
                 type:'GET',
                 url:'/comment/delete/' + commentId,
@@ -207,7 +206,7 @@
                     alert("삭제 실패");
                 }
             });
-        });
+        }
 
         function updateCommentList(response) {
             var loginId = $('#loginId').data('login-id');
