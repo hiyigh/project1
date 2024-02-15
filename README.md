@@ -1,12 +1,12 @@
 # 구현 영상
 ### 비회원
-<img width="80%" src="https://github.com/hiyigh/project1/assets/112844031/9734bfcb-6ed8-48d9-8bca-a436c42e0f48">
+<img width="50%" src="https://github.com/hiyigh/project1/assets/112844031/9734bfcb-6ed8-48d9-8bca-a436c42e0f48">
 
 ### 회원
-<img width="80%" src="https://github.com/hiyigh/project1/assets/112844031/58c115c1-5c3f-4da7-bab2-1b4b060b74b6">
+<img width="50%" src="https://github.com/hiyigh/project1/assets/112844031/58c115c1-5c3f-4da7-bab2-1b4b060b74b6">
 
 ### 관리자
-<img width="80%" src="https://github.com/hiyigh/project1/assets/112844031/b275fd34-2b57-4241-82e0-40f2e172ec59">
+<img width="50%" src="https://github.com/hiyigh/project1/assets/112844031/b275fd34-2b57-4241-82e0-40f2e172ec59">
 
 # 목표
 - 기초적인 crud 이외에 다른 기능들을 추가
