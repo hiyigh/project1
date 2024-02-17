@@ -1,6 +1,14 @@
 # 수정중
 - style, javascirpt 코드를 개별로 저장 -> 보안
 - 데이터 베이스 모델링 및 정규화
+
+- 다음 프로젝트 계획
+  1. 기능 모델링
+  2. 데이터 베이스 모델링
+  3. semantic 구조
+  4. html 구현
+  5. javascript 간결하게
+  6. 서버 연결 
 # 구현
 <img width="50%" src="https://github.com/hiyigh/project1/assets/112844031/9734bfcb-6ed8-48d9-8bca-a436c42e0f48">
 
