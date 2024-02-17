@@ -1,14 +1,13 @@
-# 수정중
-- style, javascirpt 코드를 개별로 저장 -> 보안
-- 데이터 베이스 모델링 및 정규화
-
-- 다음 프로젝트 계획
+# next
   1. 기능 모델링
   2. 데이터 베이스 모델링
   3. semantic 구조
-  4. html 구현
-  5. javascript 간결하게
-  6. 서버 연결 
+  4. style, javascirpt 분리
+  5. html 구현
+  6. javascript 간결하게
+  7. 서버 연결
+  8. 기능 심화
+  9. aws ci/cd, s3 
 # 구현
 <img width="50%" src="https://github.com/hiyigh/project1/assets/112844031/9734bfcb-6ed8-48d9-8bca-a436c42e0f48">
 
@@ -18,12 +17,7 @@
 
 # 목표
 - 기초적인 crud 이외에 다른 기능들을 추가
-# next
-- 효율적으로 db 사용
-- 구현한 기능 심화
-- aws ci/cd
-- linux
-- network
+
 # 기간
 - 1/17 
 - 1/31 결제api 
@@ -90,3 +84,6 @@
 - 데이터베이스 데이터가 null 값으로 저장-> BeanPropertyRowMapper 값을 가져와서 "setter" 를 통해 값을 할당해준다
 
 - jdbcTemplate queryForObject 에서 값이 없을 경우 -> EmptyResultDataAccessException
+
+# 
+사전에 계획없이 살을 붙여 코드를 작성했다. 완성 뒤 수정하거나 구조를 변경하려고 할 때 어려움이 많다. 
